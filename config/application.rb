@@ -47,6 +47,6 @@ module YebenteBuna
     config.session_store :cookie_store, key: "_yebente_buna_session", expire_after: 14.days
 
     # Assets pipeline configuration
-    config.assets.css_compressor = nil
+    config.assets.css_compressor = nil if config.respond_to?(:assets)
   end
 end

@@ -41,7 +41,7 @@ Rails.application.configure do
   config.active_job.verbose_enqueue_logs = true
 
   # Assets
-  config.assets.quiet = true
+  config.assets.quiet = true if config.respond_to?(:assets)
 
   # Raise error on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = :raise

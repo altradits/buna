@@ -19,6 +19,9 @@ Rails.application.routes.draw do
     delete :remove
     delete :clear
   end
+  post "cart/add", to: "carts#add", as: :cart_add
+  delete "cart/remove", to: "carts#remove", as: :cart_remove
+  delete "cart/clear", to: "carts#clear", as: :cart_clear
 
   # Kenyan M-Pesa Checkout Flow
   get "checkout", to: "checkouts#new", as: :new_checkout

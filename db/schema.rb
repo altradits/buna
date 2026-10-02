@@ -1,4 +1,15 @@
-# This file is auto-generated from the current state of the database.
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
+#
+# It's strongly recommended that you check this file into your version control system.
+
 ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -15,6 +26,79 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_categories_on_slug", unique: true
     t.index ["sort_order"], name: "index_categories_on_sort_order"
+  end
+
+  create_table "mpesa_transactions", force: :cascade do |t|
+    t.bigint "order_id"
+    t.string "merchant_request_id"
+    t.string "checkout_request_id"
+    t.string "transaction_type", default: "CustomerPayBillOnline"
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.string "phone_number", null: false
+    t.string "mpesa_receipt_number"
+    t.integer "result_code"
+    t.string "result_desc"
+    t.datetime "transaction_date"
+    t.string "status", default: "initiated", null: false
+    t.jsonb "raw_callback_payload"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checkout_request_id", "merchant_request_id"], name: "idx_on_checkout_request_id_merchant_request_id_71936513ba"
+    t.index ["checkout_request_id"], name: "index_mpesa_transactions_on_checkout_request_id"
+    t.index ["merchant_request_id"], name: "index_mpesa_transactions_on_merchant_request_id"
+    t.index ["mpesa_receipt_number"], name: "index_mpesa_transactions_on_mpesa_receipt_number"
+    t.index ["order_id"], name: "index_mpesa_transactions_on_order_id"
+    t.index ["status"], name: "index_mpesa_transactions_on_status"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.decimal "unit_price_kes", precision: 10, scale: 2, null: false
+    t.decimal "unit_price_etb", precision: 10, scale: 2, null: false
+    t.decimal "total_price_kes", precision: 10, scale: 2, null: false
+    t.decimal "total_price_etb", precision: 10, scale: 2, null: false
+    t.string "selected_format"
+    t.string "selected_roast"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "order_number", null: false
+    t.string "status", default: "pending_payment", null: false
+    t.string "currency_used", default: "KES", null: false
+    t.decimal "exchange_rate_applied", precision: 10, scale: 4, default: "0.88"
+    t.decimal "subtotal_kes", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "subtotal_etb", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "shipping_fee_kes", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "shipping_fee_etb", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_kes", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_etb", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "customer_name", null: false
+    t.string "customer_email", null: false
+    t.string "customer_phone", null: false
+    t.text "delivery_address", null: false
+    t.string "delivery_city", default: "Nairobi", null: false
+    t.string "delivery_county", default: "Nairobi"
+    t.string "postal_code"
+    t.string "origin_hub", default: "Addis Ababa Bole Central Hub"
+    t.string "border_transit_hub", default: "Moyale One-Stop Border Post"
+    t.string "destination_hub", default: "Nairobi Distribution Hub"
+    t.string "courier_provider", default: "Fargo Courier East Africa"
+    t.string "tracking_number"
+    t.text "order_notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_phone"], name: "index_orders_on_customer_phone"
+    t.index ["order_number"], name: "index_orders_on_order_number", unique: true
+    t.index ["status"], name: "index_orders_on_status"
+    t.index ["tracking_number"], name: "index_orders_on_tracking_number"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -56,102 +140,6 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.index ["stock_quantity"], name: "index_products_on_stock_quantity"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.string "full_name"
-    t.string "phone_number"
-    t.string "role", default: "customer", null: false
-    t.string "preferred_currency", default: "KES"
-    t.string "address_line1"
-    t.string "address_line2"
-    t.string "city", default: "Nairobi"
-    t.string "county", default: "Nairobi"
-    t.string "postal_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
-    t.index ["phone_number"], name: "index_users_on_phone_number"
-    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["role"], name: "index_users_on_role"
-  end
-
-  create_table "orders", force: :cascade do |t|
-    t.bigint "user_id"
-    t.string "order_number", null: false
-    t.string "status", default: "pending_payment", null: false
-    t.string "currency_used", default: "KES", null: false
-    t.decimal "exchange_rate_applied", precision: 10, scale: 4, default: "0.88"
-    t.decimal "subtotal_kes", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "subtotal_etb", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "shipping_fee_kes", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "shipping_fee_etb", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "total_kes", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "total_etb", precision: 10, scale: 2, default: "0.0", null: false
-    t.string "customer_name", null: false
-    t.string "customer_email", null: false
-    t.string "customer_phone", null: false
-    t.text "delivery_address", null: false
-    t.string "delivery_city", default: "Nairobi", null: false
-    t.string "delivery_county", default: "Nairobi"
-    t.string "postal_code"
-    t.string "origin_hub", default: "Addis Ababa Bole Central Hub"
-    t.string "border_transit_hub", default: "Moyale One-Stop Border Post"
-    t.string "destination_hub", default: "Nairobi Distribution Hub"
-    t.string "courier_provider", default: "Fargo Courier East Africa"
-    t.string "tracking_number"
-    t.text "order_notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["customer_phone"], name: "index_orders_on_customer_phone"
-    t.index ["order_number"], name: "index_orders_on_order_number", unique: true
-    t.index ["status"], name: "index_orders_on_status"
-    t.index ["tracking_number"], name: "index_orders_on_tracking_number"
-    t.index ["user_id"], name: "index_orders_on_user_id"
-  end
-
-  create_table "order_items", force: :cascade do |t|
-    t.bigint "order_id", null: false
-    t.bigint "product_id", null: false
-    t.integer "quantity", default: 1, null: false
-    t.decimal "unit_price_kes", precision: 10, scale: 2, null: false
-    t.decimal "unit_price_etb", precision: 10, scale: 2, null: false
-    t.decimal "total_price_kes", precision: 10, scale: 2, null: false
-    t.decimal "total_price_etb", precision: 10, scale: 2, null: false
-    t.string "selected_format"
-    t.string "selected_roast"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["product_id"], name: "index_order_items_on_product_id"
-  end
-
-  create_table "mpesa_transactions", force: :cascade do |t|
-    t.bigint "order_id"
-    t.string "merchant_request_id"
-    t.string "checkout_request_id"
-    t.string "transaction_type", default: "CustomerPayBillOnline"
-    t.decimal "amount", precision: 10, scale: 2, null: false
-    t.string "phone_number", null: false
-    t.string "mpesa_receipt_number"
-    t.integer "result_code"
-    t.string "result_desc"
-    t.datetime "transaction_date"
-    t.string "status", default: "initiated", null: false
-    t.jsonb "raw_callback_payload", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["checkout_request_id", "merchant_request_id"], name: "index_mpesa_transactions_on_checkout_and_merchant"
-    t.index ["checkout_request_id"], name: "index_mpesa_transactions_on_checkout_request_id"
-    t.index ["merchant_request_id"], name: "index_mpesa_transactions_on_merchant_request_id"
-    t.index ["mpesa_receipt_number"], name: "index_mpesa_transactions_on_mpesa_receipt_number"
-    t.index ["order_id"], name: "index_mpesa_transactions_on_order_id"
-    t.index ["status"], name: "index_mpesa_transactions_on_status"
-  end
-
   create_table "shipping_shipments", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.string "tracking_number", null: false
@@ -165,13 +153,28 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.datetime "dispatched_at"
     t.datetime "estimated_delivery_at"
     t.datetime "delivered_at"
-    t.jsonb "tracking_events", default: []
+    t.jsonb "tracking_events"
     t.text "consignment_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_shipping_shipments_on_order_id"
     t.index ["status"], name: "index_shipping_shipments_on_status"
     t.index ["tracking_number"], name: "index_shipping_shipments_on_tracking_number", unique: true
+  end
+
+  create_table "solid_queue_claimed_executions", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.bigint "process_id"
+    t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_claimed_executions_on_job_id", unique: true
+    t.index ["process_id", "job_id"], name: "index_solid_queue_claimed_executions_on_process_id_and_job_id"
+  end
+
+  create_table "solid_queue_failed_executions", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.text "error"
+    t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_failed_executions_on_job_id", unique: true
   end
 
   create_table "solid_queue_jobs", force: :cascade do |t|
@@ -204,9 +207,67 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.index ["supervisor_id"], name: "index_solid_queue_processes_on_supervisor_id"
   end
 
+  create_table "solid_queue_ready_executions", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "queue_name", null: false
+    t.integer "priority", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
+    t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
+    t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
+  end
+
+  create_table "solid_queue_scheduled_executions", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "queue_name", null: false
+    t.integer "priority", default: 0, null: false
+    t.datetime "scheduled_at", null: false
+    t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_scheduled_executions_on_job_id", unique: true
+    t.index ["scheduled_at", "priority", "job_id"], name: "index_solid_queue_dispatch_all"
+  end
+
+  create_table "solid_queue_semaphores", force: :cascade do |t|
+    t.string "key", null: false
+    t.integer "value", default: 1, null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_solid_queue_semaphores_on_expires_at"
+    t.index ["key"], name: "index_solid_queue_semaphores_on_key", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "full_name"
+    t.string "phone_number"
+    t.string "role", default: "customer", null: false
+    t.string "preferred_currency", default: "KES"
+    t.string "address_line1"
+    t.string "address_line2"
+    t.string "city", default: "Nairobi"
+    t.string "county", default: "Nairobi"
+    t.string "postal_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["phone_number"], name: "index_users_on_phone_number"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["role"], name: "index_users_on_role"
+  end
+
+  add_foreign_key "mpesa_transactions", "orders"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
   add_foreign_key "orders", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "shipping_shipments", "orders"
+  add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
 end

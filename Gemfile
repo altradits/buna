@@ -17,8 +17,9 @@ gem "turbo-rails"
 gem "stimulus-rails"
 gem "importmap-rails"
 
-# Tailwind CSS for Rails
+# Tailwind CSS & Asset Pipeline for Rails
 gem "tailwindcss-rails"
+gem "sprockets-rails"
 
 # User Authentication
 gem "devise", "~> 4.9"
