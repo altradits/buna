@@ -6,7 +6,15 @@
 PORT ?= 3000
 RAILS_ENV ?= development
 
-.PHONY: run dev stop kill-port setup seed console status check-deps install-deps help
+# Userspace Ruby & Gem Environment (Works without root/sudo)
+export GEM_HOME ?= $(HOME)/.local/share/gem/ruby/3.2.0
+export GEM_PATH ?= $(HOME)/.local/share/gem/ruby/3.2.0:/var/lib/gems/3.2.0
+export PATH := $(HOME)/.local/bin:$(HOME)/.local/share/gem/ruby/3.2.0/bin:$(PATH)
+export RUBYOPT ?= -r$(HOME)/.local/lib/ruby-dev-hook.rb
+export LIBRARY_PATH := $(HOME)/.local/lib/ruby-dev-headers/lib/x86_64-linux-gnu:$(LIBRARY_PATH)
+export LD_LIBRARY_PATH := $(HOME)/.local/lib/ruby-dev-headers/lib/x86_64-linux-gnu:$(LD_LIBRARY_PATH)
+
+.PHONY: run dev stop kill-port setup seed console status check-deps help
 
 ## help: Display available targets
 help:
@@ -17,7 +25,7 @@ help:
 	@echo "  make stop       - Kill any process currently listening on port $(PORT)"
 	@echo "  make kill-port  - Force kill any process holding port $(PORT) and remove PID files"
 	@echo "  make check-deps - Verify whether gem bundle is installed"
-	@echo "  make setup      - Install bundle, prepare PostgreSQL database, and run seeds"
+	@echo "  make setup      - Prepare database and seed product taxonomy"
 	@echo "  make seed       - Seed product taxonomy (Sidamo, Yirgacheffe, Jebenas, Frankincense)"
 	@echo "  make console    - Launch Rails console in $(RAILS_ENV) mode"
 	@echo "  make status     - Inspect any process currently bound to port $(PORT)"
@@ -39,20 +47,11 @@ kill-port:
 		rm -f tmp/pids/server.pid; \
 	fi
 
-## check-deps: Check if gems are installed, or provide one-liner fix
+## check-deps: Check if gems are installed
 check-deps:
 	@if ! bundle check >/dev/null 2>&1; then \
-		echo "==> Missing gem dependencies detected. Attempting bundle install..."; \
-		bundle install || { \
-			echo ""; \
-			echo "=========================================================================="; \
-			echo "NOTICE: Building native extensions (pg, puma, etc.) requires system headers."; \
-			echo "Please execute this one-liner in your terminal:"; \
-			echo "    sudo apt update && sudo apt install -y ruby-dev libpq-dev && bundle install"; \
-			echo "Then re-run: make run"; \
-			echo "=========================================================================="; \
-			exit 1; \
-		}; \
+		echo "==> Resolving gem dependencies..."; \
+		bundle install; \
 	fi
 
 ## run: Kill any process on port $(PORT), verify dependencies, then start Rails
