@@ -7,10 +7,18 @@ class CheckoutsController < ApplicationController
 
     @counties = Logistics::EastAfricanCourierService::KENYA_COUNTY_RATES.keys
     @selected_county = params[:county].presence || "Nairobi"
-    @shipping_quote = Logistics::EastAfricanCourierService.calculate_shipping(county: @selected_county)
+    @selected_courier = params[:courier].presence || "Fargo Courier East Africa"
     @cart_items = load_cart_items
-    @total_kes = @cart_items.sum { |i| i[:total_kes] } + @shipping_quote[:shipping_fee_kes]
-    @total_etb = @cart_items.sum { |i| i[:total_etb] } + @shipping_quote[:shipping_fee_etb]
+    total_weight = @cart_items.sum { |i| (i[:product].weight_grams || 500) * i[:quantity] }
+    @shipping_quote = Logistics::EastAfricanCourierService.calculate_shipping(
+      county: @selected_county,
+      total_weight_grams: total_weight,
+      courier: @selected_courier
+    )
+    @subtotal_kes = @cart_items.sum { |i| i[:total_kes] }
+    @subtotal_etb = @cart_items.sum { |i| i[:total_etb] }
+    @total_kes = @subtotal_kes + @shipping_quote[:shipping_fee_kes]
+    @total_etb = @subtotal_etb + @shipping_quote[:shipping_fee_etb]
     @default_phone = params[:phone].presence || ENV.fetch("DEFAULT_MERCHANT_PHONE", "+254707172370")
   end
 

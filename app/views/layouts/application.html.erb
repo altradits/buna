@@ -225,19 +225,34 @@
   </main>
 
   <!-- Slide-Over Shopping Cart Drawer (Hotwire Turbo Reactive) -->
-  <div data-cart-target="backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-opacity" data-action="click->cart#close"></div>
+  <div data-cart-target="backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300 ease-out cursor-pointer" data-action="click->cart#close"></div>
   <aside data-cart-target="drawer" class="fixed top-0 right-0 bottom-0 w-full max-w-md bg-[#FAF6EE] z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-[#EFE7DA]">
-    <div class="p-6 bg-[#24130D] text-white flex items-center justify-between">
+    <div class="p-5 bg-[#24130D] text-white flex items-center justify-between border-b border-[#3A2016]">
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-lg bg-[#3A2016] text-[#E5A652] flex items-center justify-center font-bold">YB</div>
+        <div class="w-10 h-10 rounded-xl bg-[#3A2016] text-[#E5A652] flex items-center justify-center font-bold text-base shadow-sm">YB</div>
         <div>
-          <h3 class="font-serif text-lg font-bold text-[#EFE7DA]">Buna Basket</h3>
-          <p class="text-xs text-[#E5A652]">Sovereign Ethiopian Coffee & Artifacts</p>
+          <div class="flex items-baseline space-x-1.5">
+            <h3 class="font-serif text-lg font-bold text-[#EFE7DA]">Buna Basket</h3>
+            <span class="text-xs font-mono text-[#E5A652]">(<span id="drawer-item-count"><%= cart_count %></span>)</span>
+          </div>
+          <p class="text-[11px] text-[#E5A652] font-amharic">የበንቴ ቡና ቅርጫት</p>
         </div>
       </div>
-      <button type="button" data-action="click->cart#close" aria-label="Close basket" class="p-1.5 rounded-lg text-neutral-300 hover:text-white hover:bg-[#3A2016] transition-colors cursor-pointer">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+
+      <div class="flex items-center space-x-2">
+        <div class="flex items-center bg-[#140B07] rounded-lg p-0.5 border border-[#3A2016]">
+          <%= button_to switch_currency_path(currency: "KES"), method: :post, form_class: "inline", class: "px-2 py-0.5 text-[10px] font-bold rounded #{current_currency == 'KES' ? 'bg-[#D48B38] text-white' : 'text-neutral-400 hover:text-white'}" do %>
+            KES
+          <% end %>
+          <%= button_to switch_currency_path(currency: "ETB"), method: :post, form_class: "inline", class: "px-2 py-0.5 text-[10px] font-bold rounded #{current_currency == 'ETB' ? 'bg-[#D48B38] text-white' : 'text-neutral-400 hover:text-white'}" do %>
+            ETB
+          <% end %>
+        </div>
+
+        <button type="button" data-action="click->cart#close" aria-label="Close basket" class="p-1.5 rounded-lg text-neutral-300 hover:text-white hover:bg-[#3A2016] transition-colors cursor-pointer">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
     <!-- Reactive Turbo Stream Frame for Cart Drawer -->

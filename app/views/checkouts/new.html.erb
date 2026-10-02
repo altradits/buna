@@ -1,118 +1,156 @@
-<div class="py-12 bg-[#FAF6EE]">
+<div class="py-12 bg-[#FAF6EE]" 
+     data-controller="checkout" 
+     data-checkout-subtotal-kes-value="<%= @subtotal_kes %>" 
+     data-checkout-subtotal-etb-value="<%= @subtotal_etb %>" 
+     data-checkout-rate-kes-to-etb-value="<%= CurrencyHelper.current_rate_kes_to_etb %>">
+  
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
     
+    <!-- Title & Back to Basket Header -->
     <div class="border-b border-[#EFE7DA] pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <span class="text-xs font-bold text-[#9E472A] uppercase tracking-widest">Direct Kenyan Delivery</span>
+        <div class="inline-flex items-center space-x-2 text-xs font-bold text-[#00A859] uppercase tracking-wider mb-1">
+          <span class="w-2 h-2 rounded-full bg-[#00A859] animate-pulse"></span>
+          <span>Cross-Border Corridor • Addis Ababa ➔ Moyale OSBP ➔ Nairobi</span>
+        </div>
         <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#140B07]">Ceremony Checkout</h1>
-        <p class="text-xs text-neutral-600 mt-1">Cross-border freight from Addis Ababa Bole Hub to your Kenyan doorstep via Safaricom M-Pesa.</p>
+        <p class="text-xs text-neutral-600 mt-1">Direct single-origin coffee and cultural artifacts cleared through Kenyan customs via Safaricom M-Pesa.</p>
       </div>
       <div>
-        <%= link_to "← Edit Basket", cart_path, class: "inline-flex items-center text-xs font-semibold px-4 py-2 rounded-xl bg-white border border-[#EFE7DA] text-[#D48B38] hover:text-[#9E472A] shadow-xs transition-colors" %>
+        <%= link_to "← Edit Basket", cart_path, class: "inline-flex items-center text-xs font-semibold px-4 py-2.5 rounded-xl bg-white border border-[#EFE7DA] text-[#24130D] hover:bg-[#FAF6EE] hover:text-[#9E472A] shadow-xs transition-colors" %>
       </div>
     </div>
 
-    <%= form_with url: checkout_path, method: :post, local: true, class: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-start" do |f| %>
+    <%= form_with url: checkout_path, method: :post, local: true, data: { action: "submit->checkout#handleSubmit" }, class: "grid grid-cols-1 lg:grid-cols-12 gap-12 items-start" do |f| %>
       
       <!-- Left Column: Shipping & Customer Details -->
       <div class="lg:col-span-7 space-y-8">
         
         <!-- Recipient Information -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-4">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-5">
           <div class="flex items-center space-x-3 border-b border-[#EFE7DA] pb-4">
             <div class="w-8 h-8 rounded-lg bg-[#24130D] text-[#E5A652] flex items-center justify-center font-bold text-xs">1</div>
-            <h2 class="font-serif text-lg font-bold text-[#140B07]">Customer & Recipient Details</h2>
+            <div>
+              <h2 class="font-serif text-lg font-bold text-[#140B07]">Customer & Recipient Details</h2>
+              <p class="text-[11px] text-neutral-500">Order confirmation & SMS waybill updates will be sent here.</p>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-neutral-700 mb-1">Full Name</label>
-              <%= f.text_field :customer_name, value: (current_user&.full_name || "Buna Connoisseur"), required: true, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
+              <%= f.text_field :customer_name, value: (current_user&.full_name || "Buna Connoisseur"), required: true, class: "w-full text-xs p-3.5 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-neutral-700 mb-1">Email Address (Order Confirmation)</label>
-              <%= f.email_field :customer_email, value: (current_user&.email || "yebente@gmail.com"), required: true, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
+              <label class="block text-xs font-semibold text-neutral-700 mb-1">Email Address</label>
+              <%= f.email_field :customer_email, value: (current_user&.email || "yebente@gmail.com"), required: true, class: "w-full text-xs p-3.5 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
             </div>
           </div>
         </div>
 
-        <!-- Kenyan Delivery Location -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-4">
+        <!-- Kenyan Delivery Location & Live Shipping Calculator -->
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-5">
           <div class="flex items-center space-x-3 border-b border-[#EFE7DA] pb-4">
             <div class="w-8 h-8 rounded-lg bg-[#24130D] text-[#E5A652] flex items-center justify-center font-bold text-xs">2</div>
-            <h2 class="font-serif text-lg font-bold text-[#140B07]">Kenyan Shipping Destination</h2>
+            <div>
+              <h2 class="font-serif text-lg font-bold text-[#140B07]">Kenyan Shipping Destination</h2>
+              <p class="text-[11px] text-neutral-500">Delivery calculated from Moyale Customs Post to your Kenyan county.</p>
+            </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-neutral-700 mb-1">Destination County (Kenya)</label>
-              <%= f.select :delivery_county, options_for_select(@counties, @selected_county), {}, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-white focus:ring-2 focus:ring-[#D48B38] focus:outline-none" %>
+              <%= f.select :delivery_county, options_for_select(@counties, @selected_county), {}, data: { checkout_target: "countySelect", action: "change->checkout#updateCalculations" }, class: "w-full text-xs p-3.5 rounded-xl border border-[#EFE7DA] bg-white focus:ring-2 focus:ring-[#D48B38] focus:outline-none cursor-pointer" %>
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-neutral-700 mb-1">City / Neighborhood</label>
-              <%= f.text_field :delivery_city, value: "Nairobi (Westlands / Kilimani / Karen)", required: true, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
+              <%= f.text_field :delivery_city, value: "Nairobi (Westlands / Kilimani / Karen)", required: true, class: "w-full text-xs p-3.5 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
             </div>
 
             <div class="sm:col-span-2">
               <label class="block text-xs font-semibold text-neutral-700 mb-1">Street Address, Apartment or Building</label>
-              <%= f.text_area :delivery_address, rows: 2, placeholder: "e.g. House 14, Acacia Avenue, Lavington, Nairobi", required: true, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
+              <%= f.text_area :delivery_address, rows: 2, placeholder: "e.g. House 14, Acacia Avenue, Lavington, Nairobi", required: true, class: "w-full text-xs p-3.5 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE]/50 focus:ring-2 focus:ring-[#D48B38] focus:bg-white focus:outline-none" %>
             </div>
           </div>
 
-          <!-- Courier Selection -->
-          <div class="pt-4 border-t border-[#EFE7DA]">
-            <label class="block text-xs font-semibold text-neutral-700 mb-2">Select Regional Courier Partner</label>
+          <!-- Interactive Courier Selection -->
+          <div class="pt-4 border-t border-[#EFE7DA] space-y-3">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-semibold text-neutral-800">Select Regional Courier Partner</label>
+              <span class="text-[11px] text-neutral-500">Addis Ababa ➔ Doorstep</span>
+            </div>
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <label class="p-3 rounded-xl border border-[#D48B38] bg-[#FAF6EE] flex items-center space-x-2 cursor-pointer text-xs">
-                <%= f.radio_button :courier_provider, "Fargo Courier East Africa", checked: true, class: "text-[#D48B38]" %>
-                <span><strong>Fargo Courier</strong> (Moyale Corridor)</span>
+              <label class="p-3.5 rounded-2xl border-2 border-[#D48B38] bg-[#FAF6EE] flex flex-col justify-between cursor-pointer text-xs space-y-2 hover:border-[#D48B38] transition-all">
+                <div class="flex items-center space-x-2">
+                  <%= f.radio_button :courier_provider, "Fargo Courier East Africa", checked: (@selected_courier == "Fargo Courier East Africa"), data: { checkout_target: "courierRadio", action: "change->checkout#updateCalculations" }, class: "text-[#D48B38] focus:ring-[#D48B38]" %>
+                  <span class="font-bold text-[#140B07]">Fargo Courier</span>
+                </div>
+                <div class="text-[11px] text-neutral-600">Standard Road Freight (Moyale Corridor)</div>
+                <div class="text-[11px] font-semibold text-[#00A859]">Baseline Rate • 3-4 Days</div>
               </label>
-              <label class="p-3 rounded-xl border border-[#EFE7DA] bg-white flex items-center space-x-2 cursor-pointer text-xs">
-                <%= f.radio_button :courier_provider, "Sendy Express Kenya", class: "text-[#D48B38]" %>
-                <span><strong>Sendy Express</strong> (Direct Doorstep)</span>
+
+              <label class="p-3.5 rounded-2xl border-2 border-[#EFE7DA] bg-white flex flex-col justify-between cursor-pointer text-xs space-y-2 hover:border-[#D48B38] transition-all">
+                <div class="flex items-center space-x-2">
+                  <%= f.radio_button :courier_provider, "Sendy Express Kenya", checked: (@selected_courier == "Sendy Express Kenya"), data: { checkout_target: "courierRadio", action: "change->checkout#updateCalculations" }, class: "text-[#D48B38] focus:ring-[#D48B38]" %>
+                  <span class="font-bold text-[#140B07]">Sendy Express</span>
+                </div>
+                <div class="text-[11px] text-neutral-600">Direct Express Delivery (+KSh 150)</div>
+                <div class="text-[11px] font-semibold text-[#D48B38]">Priority Doorstep • 2-3 Days</div>
               </label>
-              <label class="p-3 rounded-xl border border-[#EFE7DA] bg-white flex items-center space-x-2 cursor-pointer text-xs">
-                <%= f.radio_button :courier_provider, "DHL East Africa", class: "text-[#D48B38]" %>
-                <span><strong>DHL East Africa</strong> (Priority Flight)</span>
+
+              <label class="p-3.5 rounded-2xl border-2 border-[#EFE7DA] bg-white flex flex-col justify-between cursor-pointer text-xs space-y-2 hover:border-[#D48B38] transition-all">
+                <div class="flex items-center space-x-2">
+                  <%= f.radio_button :courier_provider, "DHL East Africa", checked: (@selected_courier == "DHL East Africa"), data: { checkout_target: "courierRadio", action: "change->checkout#updateCalculations" }, class: "text-[#D48B38] focus:ring-[#D48B38]" %>
+                  <span class="font-bold text-[#140B07]">DHL East Africa</span>
+                </div>
+                <div class="text-[11px] text-neutral-600">Priority Regional Flight (+KSh 450)</div>
+                <div class="text-[11px] font-semibold text-[#9E472A]">Bole Airfreight • 1-2 Days</div>
               </label>
             </div>
           </div>
         </div>
 
         <!-- M-Pesa Payment Details -->
-        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-4">
+        <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-5">
           <div class="flex items-center space-x-3 border-b border-[#EFE7DA] pb-4">
             <div class="w-8 h-8 rounded-lg bg-[#00A859] text-white flex items-center justify-center font-bold text-xs">3</div>
             <div>
               <h2 class="font-serif text-lg font-bold text-[#140B07]">Safaricom M-Pesa Express Checkout</h2>
-              <p class="text-[11px] text-neutral-500">Pay directly with your Safaricom mobile money balance.</p>
+              <p class="text-[11px] text-neutral-500">STK Push prompt will be sent immediately to your phone.</p>
             </div>
           </div>
 
-          <div class="p-4 rounded-2xl bg-[#00A859]/5 border border-[#00A859]/20 space-y-3">
-            <div class="flex items-center space-x-2 text-xs font-bold text-[#00A859]">
-              <span class="w-2 h-2 rounded-full bg-[#00A859] animate-pulse"></span>
-              <span>M-Pesa STK Push Prompt</span>
+          <div class="p-5 rounded-2xl bg-gradient-to-br from-[#00A859]/5 to-transparent border border-[#00A859]/25 space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2 text-xs font-bold text-[#00A859]">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#00A859] animate-pulse"></span>
+                <span>M-Pesa STK Push Instant Authorization</span>
+              </div>
+              <span class="text-[11px] font-bold text-neutral-500">Paybill: 174379</span>
             </div>
             
             <div>
-              <label class="block text-xs font-semibold text-neutral-800 mb-1">
-                Enter Your Safaricom Phone Number
+              <label class="block text-xs font-semibold text-neutral-800 mb-1.5">
+                Safaricom Mobile Number
               </label>
               <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-neutral-500">🇰🇪</span>
-                <%= f.telephone_field :customer_phone, value: @default_phone, placeholder: "0707172370 or 254707172370", required: true, class: "w-full pl-10 text-sm font-semibold p-3.5 rounded-xl border border-neutral-300 bg-white focus:ring-2 focus:ring-[#00A859] focus:outline-none" %>
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-sm font-bold text-neutral-500">🇰🇪</span>
+                <%= f.telephone_field :customer_phone, value: @default_phone, placeholder: "0707 172 370 or 254707172370", required: true, data: { checkout_target: "phoneInput", action: "input->checkout#formatPhone" }, class: "w-full pl-11 text-base font-mono font-bold p-3.5 rounded-xl border border-neutral-300 bg-white focus:ring-2 focus:ring-[#00A859] focus:outline-none" %>
               </div>
-              <p class="text-[11px] text-neutral-500 mt-1">An instant pop-up will appear on this phone asking for your M-Pesa PIN.</p>
+              <div data-checkout-target="phoneStatus" class="text-[11px] mt-1.5">
+                <span class="text-neutral-500">Enter your phone number to receive the instant M-Pesa PIN prompt.</span>
+              </div>
             </div>
           </div>
 
           <div class="pt-2">
             <%= f.button type: :submit, class: "w-full py-4 px-6 rounded-2xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-base flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transition-all cursor-pointer" do %>
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6zm-2-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
-              <span>Authorize M-Pesa Payment • <%= CurrencyHelper.format_money(@total_kes, "KES") %></span>
+              <svg class="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6zm-2-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
+              <span data-checkout-target="submitBtnText">Authorize M-Pesa Payment • <%= CurrencyHelper.format_money(@total_kes, "KES") %></span>
             <% end %>
           </div>
         </div>
@@ -122,57 +160,69 @@
       <!-- Right Column: Order Summary -->
       <div class="lg:col-span-5 space-y-6">
         <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-6 sticky top-28">
-          <h3 class="font-serif text-xl font-bold text-[#140B07] border-b border-[#EFE7DA] pb-4">Consignment Summary</h3>
+          <div class="flex items-center justify-between border-b border-[#EFE7DA] pb-4">
+            <h3 class="font-serif text-xl font-bold text-[#140B07]">Consignment Summary</h3>
+            <span class="text-xs font-bold text-[#D48B38]"><%= @cart_items.sum { |i| i[:quantity] } %> Items</span>
+          </div>
 
-          <div class="divide-y divide-[#EFE7DA] max-h-72 overflow-y-auto pr-1">
+          <!-- Items Scroll Area -->
+          <div class="divide-y divide-[#EFE7DA] max-h-72 overflow-y-auto pr-1 space-y-1">
             <% @cart_items.each do |item| %>
               <div class="py-3 flex justify-between items-start text-xs">
-                <div>
-                  <h4 class="font-bold text-[#140B07]"><%= item[:product].name %></h4>
-                  <p class="text-[11px] text-neutral-500">
-                    <%= item[:format] %> • Qty: <%= item[:quantity] %>
-                  </p>
+                <div class="flex-1 pr-3">
+                  <h4 class="font-serif font-bold text-[#140B07]"><%= item[:product].name %></h4>
+                  <div class="text-[11px] text-neutral-500 mt-0.5 flex flex-wrap gap-1">
+                    <% if item[:format].present? %><span class="bg-[#FAF6EE] px-1.5 py-0.5 rounded"><%= item[:format] %></span><% end %>
+                    <span>Qty: <strong><%= item[:quantity] %></strong></span>
+                  </div>
                 </div>
-                <div class="font-bold text-[#9E472A]">
-                  <%= item[:product].formatted_price(current_currency) %>
+                <div class="font-bold text-[#9E472A] whitespace-nowrap">
+                  <%= CurrencyHelper.format_money(current_currency == 'ETB' ? item[:total_etb] : item[:total_kes], current_currency) %>
                 </div>
               </div>
             <% end %>
           </div>
 
-          <!-- Totals Breakdown -->
-          <div class="space-y-2 pt-4 border-t border-[#EFE7DA] text-xs">
+          <!-- Totals Breakdown with Dynamic Targets -->
+          <div class="space-y-2.5 pt-4 border-t border-[#EFE7DA] text-xs">
             <div class="flex justify-between text-neutral-600">
               <span>Merchandise Subtotal</span>
-              <span class="font-semibold text-[#140B07]"><%= CurrencyHelper.format_money(@cart_items.sum { |i| i[:total_kes] }, "KES") %></span>
+              <span class="font-semibold text-[#140B07]"><%= CurrencyHelper.format_money(@subtotal_kes, "KES") %></span>
             </div>
 
             <div class="flex justify-between text-neutral-600">
-              <span>East African Cross-Border Logistics</span>
-              <span class="font-semibold text-[#140B07]"><%= CurrencyHelper.format_money(@shipping_quote[:shipping_fee_kes], "KES") %></span>
+              <span>Cross-Border Logistics</span>
+              <span data-checkout-target="shippingDisplay" class="font-semibold text-[#140B07]">
+                <%= CurrencyHelper.format_money(@shipping_quote[:shipping_fee_kes], "KES") %>
+              </span>
             </div>
 
             <div class="flex justify-between text-neutral-500 text-[11px]">
               <span>Moyale OSBP Customs & Handling</span>
-              <span class="text-[#00A859] font-medium">Included</span>
+              <span class="text-[#00A859] font-semibold">Included</span>
             </div>
 
             <div class="pt-4 border-t border-[#EFE7DA] flex justify-between items-baseline">
-              <span class="font-serif text-base font-bold text-[#140B07]">Total Due (KES)</span>
-              <span class="font-serif text-2xl font-bold text-[#9E472A]">
+              <div>
+                <span class="font-serif text-base font-bold text-[#140B07] block">Total Due (KES)</span>
+                <span class="text-[11px] text-neutral-400">Via Safaricom M-Pesa</span>
+              </div>
+              <span data-checkout-target="totalDisplay" class="font-serif text-2xl font-bold text-[#9E472A]">
                 <%= CurrencyHelper.format_money(@total_kes, "KES") %>
               </span>
             </div>
 
             <div class="text-right text-[11px] text-neutral-500">
-              Equivalent: <strong><%= CurrencyHelper.format_money(@total_etb, "ETB") %></strong>
+              Equivalent: <strong data-checkout-target="totalDisplayEtb"><%= CurrencyHelper.format_money(@total_etb, "ETB") %></strong>
             </div>
           </div>
 
-          <!-- Merchant Confidence Badge -->
+          <!-- Guarantee Badge -->
           <div class="p-4 rounded-2xl bg-[#FAF6EE] border border-[#EFE7DA] text-[11px] text-neutral-600 space-y-1">
-            <div class="font-bold text-[#24130D]">Yebente Buna Guarantee</div>
-            <p>Direct authentic Ethiopian sourcing. Freshly roasted in Addis Ababa, sealed for aroma retention, and dispatched across the Kenya-Ethiopia corridor.</p>
+            <div class="font-bold text-[#24130D] flex items-center">
+              <span class="text-[#00A859] mr-1">✓</span> Yebente Buna Direct Sourcing Guarantee
+            </div>
+            <p>100% genuine single-origin coffee and handcrafted artifacts packed in Addis Ababa, cleared through Moyale OSBP, and delivered to your doorstep.</p>
           </div>
         </div>
       </div>
@@ -180,4 +230,38 @@
     <% end %>
 
   </div>
+
+  <!-- Safaricom M-Pesa STK Processing Overlay Modal -->
+  <div data-checkout-target="processingModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 border border-[#EFE7DA] shadow-2xl text-center space-y-6">
+      <div class="w-20 h-20 mx-auto rounded-full bg-[#00A859]/10 text-[#00A859] flex items-center justify-center font-bold text-3xl pulse-stk shadow-inner">
+        📱
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="font-serif text-2xl font-bold text-[#140B07]">Check Your Phone!</h3>
+        <p class="text-xs text-neutral-600 leading-relaxed">
+          An instant Safaricom M-Pesa PIN prompt has been dispatched to:
+        </p>
+        <div data-checkout-target="modalPhone" class="text-lg font-mono font-bold text-[#00A859]">
+          <%= @default_phone %>
+        </div>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-[#FAF6EE] border border-[#EFE7DA] text-xs space-y-2 text-left">
+        <div class="font-bold text-[#140B07] text-center">Quick Steps to Authorize:</div>
+        <ol class="list-decimal list-inside space-y-1 text-neutral-600">
+          <li>Unlock your phone and verify amount: <strong data-checkout-target="modalAmount"><%= CurrencyHelper.format_money(@total_kes, "KES") %></strong></li>
+          <li>Confirm merchant: <strong>Yebente Buna</strong></li>
+          <li>Enter your 4-digit M-Pesa PIN and press <strong>Send</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="flex items-center justify-center space-x-2 text-xs text-neutral-400">
+        <svg class="animate-spin h-4 w-4 text-[#00A859]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        <span>Waiting for M-Pesa network confirmation...</span>
+      </div>
+    </div>
+  </div>
+
 </div>

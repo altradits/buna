@@ -27,7 +27,13 @@ module Logistics
         excess_weight_kg = [ (total_weight_grams - 1000) / 1000.0, 0 ].max
         weight_surcharge = (excess_weight_kg * 120.0).round(2)
 
-        total_kes = (base + weight_surcharge).round(2)
+        courier_extra = case courier.to_s
+                        when /Sendy/i then 150.0
+                        when /DHL/i then 450.0
+                        else 0.0
+                        end
+
+        total_kes = (base + weight_surcharge + courier_extra).round(2)
         total_etb = CurrencyHelper.convert_kes_to_etb(total_kes)
 
         {

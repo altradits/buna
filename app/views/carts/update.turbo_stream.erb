@@ -2,6 +2,10 @@
   <%= cart_count %>
 <% end %>
 
+<%= turbo_stream.update "drawer-item-count" do %>
+  <%= cart_count %>
+<% end %>
+
 <%= turbo_stream.update "cart-drawer-content" do %>
   <%= render "carts/cart_drawer" %>
 <% end %>

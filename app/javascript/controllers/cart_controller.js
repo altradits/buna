@@ -19,12 +19,16 @@ export default class extends Controller {
   }
 
   open() {
+    if (this.hasBackdropTarget) {
+      this.backdropTarget.classList.remove("hidden")
+      requestAnimationFrame(() => {
+        this.backdropTarget.classList.remove("opacity-0")
+        this.backdropTarget.classList.add("opacity-100")
+      })
+    }
     if (this.hasDrawerTarget) {
       this.drawerTarget.classList.remove("translate-x-full")
       this.drawerTarget.classList.add("translate-x-0")
-    }
-    if (this.hasBackdropTarget) {
-      this.backdropTarget.classList.remove("hidden")
     }
     document.body.classList.add("overflow-hidden")
   }
@@ -35,7 +39,13 @@ export default class extends Controller {
       this.drawerTarget.classList.add("translate-x-full")
     }
     if (this.hasBackdropTarget) {
-      this.backdropTarget.classList.add("hidden")
+      this.backdropTarget.classList.remove("opacity-100")
+      this.backdropTarget.classList.add("opacity-0")
+      setTimeout(() => {
+        if (!this.drawerTarget.classList.contains("translate-x-0")) {
+          this.backdropTarget.classList.add("hidden")
+        }
+      }, 300)
     }
     document.body.classList.remove("overflow-hidden")
   }
