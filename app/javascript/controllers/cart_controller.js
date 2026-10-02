@@ -6,23 +6,37 @@ export default class extends Controller {
   connect() {
     this.boundCloseOnEscape = this.closeOnEscape.bind(this)
     document.addEventListener("keydown", this.boundCloseOnEscape)
+    this.boundCartOpen = this.open.bind(this)
+    document.addEventListener("cart:open", this.boundCartOpen)
+    this.boundCartClose = this.close.bind(this)
+    document.addEventListener("cart:close", this.boundCartClose)
   }
 
   disconnect() {
     document.removeEventListener("keydown", this.boundCloseOnEscape)
+    document.removeEventListener("cart:open", this.boundCartOpen)
+    document.removeEventListener("cart:close", this.boundCartClose)
   }
 
   open() {
-    this.drawerTarget.classList.remove("translate-x-full")
-    this.drawerTarget.classList.add("translate-x-0")
-    this.backdropTarget.classList.remove("hidden")
+    if (this.hasDrawerTarget) {
+      this.drawerTarget.classList.remove("translate-x-full")
+      this.drawerTarget.classList.add("translate-x-0")
+    }
+    if (this.hasBackdropTarget) {
+      this.backdropTarget.classList.remove("hidden")
+    }
     document.body.classList.add("overflow-hidden")
   }
 
   close() {
-    this.drawerTarget.classList.remove("translate-x-0")
-    this.drawerTarget.classList.add("translate-x-full")
-    this.backdropTarget.classList.add("hidden")
+    if (this.hasDrawerTarget) {
+      this.drawerTarget.classList.remove("translate-x-0")
+      this.drawerTarget.classList.add("translate-x-full")
+    }
+    if (this.hasBackdropTarget) {
+      this.backdropTarget.classList.add("hidden")
+    }
     document.body.classList.remove("overflow-hidden")
   }
 

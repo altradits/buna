@@ -57,7 +57,7 @@
           <% else %>
             <% @recent_orders.each do |order| %>
               <tr class="hover:bg-slate-800/50">
-                <td class="py-3 px-4 font-mono text-amber-400"><%= link_to order.order_number, order_path(order) %></td>
+                <td class="py-3 px-4 font-mono text-amber-400"><%= link_to order.order_number, admin_order_path(order), class: "hover:underline" %></td>
                 <td class="py-3 px-4"><%= order.customer_name %></td>
                 <td class="py-3 px-4 font-mono"><%= order.customer_phone %></td>
                 <td class="py-3 px-4"><%= order.delivery_city %>, <%= order.delivery_county %></td>

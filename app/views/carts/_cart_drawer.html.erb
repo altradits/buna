@@ -1,32 +1,94 @@
 <% if current_cart.empty? %>
-  <div class="text-center py-16 text-[#3A2016]">
-    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[#EFE7DA] flex items-center justify-center text-[#9E472A]">
-      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+  <div class="flex-1 flex flex-col items-center justify-center text-center p-8 text-[#3A2016]">
+    <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-[#EFE7DA] flex items-center justify-center text-4xl shadow-inner">
+      ☕
     </div>
-    <h4 class="font-serif text-lg font-semibold text-[#140B07]">Your basket is empty</h4>
-    <p class="text-xs text-neutral-600 mt-1 max-w-xs mx-auto">Explore fresh Sidamo roasts, handcrafted clay Jebenas, and ceremonial Frankincense.</p>
-    <div class="mt-6">
-      <%= link_to "Browse Coffee Varieties", products_path(category: "coffee-varieties"), class: "inline-flex px-5 py-2.5 rounded-lg bg-[#24130D] text-[#E5A652] text-xs font-semibold hover:bg-[#140B07]" %>
+    <h4 class="font-serif text-xl font-bold text-[#140B07]">Your Buna Basket is Empty</h4>
+    <p class="text-xs text-neutral-600 mt-2 max-w-xs mx-auto leading-relaxed">
+      Select fresh heirloom roasts from Yirgacheffe or Sidamo, handcrafted clay Jebenas, or ceremonial Tigray Frankincense.
+    </p>
+    <div class="mt-6 space-y-2 w-full max-w-xs">
+      <%= link_to "Browse Single-Origin Beans", products_path(category: "coffee-varieties"), data: { action: "click->cart#close" }, class: "w-full inline-flex justify-center items-center px-5 py-3 rounded-xl bg-[#24130D] text-[#E5A652] text-xs font-bold hover:bg-[#140B07] shadow-sm transition-all" %>
+      <%= link_to "Ceremony Brewing Hardware", products_path(category: "traditional-brewing-hardware"), data: { action: "click->cart#close" }, class: "w-full inline-flex justify-center items-center px-5 py-2.5 rounded-xl bg-white text-[#9E472A] border border-[#EFE7DA] text-xs font-semibold hover:bg-[#FAF6EE] transition-all" %>
     </div>
   </div>
 <% else %>
-  <% current_cart.each do |product_id, item| %>
-    <% product = Product.find_by(id: product_id) %>
-    <% next unless product %>
-    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white border border-[#EFE7DA] shadow-sm">
-      <div class="flex-1 pr-3">
-        <h5 class="text-sm font-semibold text-[#140B07]"><%= product.name %></h5>
-        <div class="text-xs text-neutral-500 flex flex-wrap gap-1 mt-0.5">
-          <% if item["format"].present? %><span class="bg-[#EFE7DA] px-1.5 py-0.5 rounded text-[10px]"><%= item["format"] %></span><% end %>
-          <% if item["roast"].present? %><span class="bg-[#24130D] text-[#E5A652] px-1.5 py-0.5 rounded text-[10px]"><%= item["roast"] %></span><% end %>
+  <div class="flex-1 overflow-y-auto p-6 space-y-4">
+    <% current_cart.each do |product_id, item| %>
+      <% product = Product.find_by(id: product_id) %>
+      <% next unless product %>
+      <% qty = item["quantity"].to_i %>
+      <% line_total_kes = product.price_kes * qty %>
+      <% line_total_etb = product.price_etb * qty %>
+      <% line_total = current_currency == "ETB" ? line_total_etb : line_total_kes %>
+
+      <div class="p-4 rounded-2xl bg-white border border-[#EFE7DA] shadow-sm space-y-3">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex-1">
+            <span class="text-[10px] text-[#9E472A] font-bold uppercase tracking-wider block">
+              <%= product.origin_zone.presence || product.category.name %>
+            </span>
+            <h5 class="text-sm font-serif font-bold text-[#140B07] hover:text-[#9E472A] leading-snug">
+              <%= link_to product.name, product_path(product), data: { action: "click->cart#close" } %>
+            </h5>
+            <div class="text-xs text-neutral-500 flex flex-wrap gap-1.5 mt-1">
+              <% if item["format"].present? %>
+                <span class="bg-[#FAF6EE] text-[#3A2016] px-2 py-0.5 rounded text-[10px] border border-[#EFE7DA] font-medium"><%= item["format"] %></span>
+              <% end %>
+              <% if item["roast"].present? %>
+                <span class="bg-[#24130D] text-[#E5A652] px-2 py-0.5 rounded text-[10px] font-semibold"><%= item["roast"] %></span>
+              <% end %>
+            </div>
+          </div>
+
+          <%= button_to cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-1.5 text-neutral-400 hover:text-red-600 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <% end %>
         </div>
-        <div class="text-xs font-bold text-[#9E472A] mt-1">
-          Qty: <%= item["quantity"] %> × <%= product.formatted_price(current_currency) %>
+
+        <div class="pt-2 border-t border-[#EFE7DA] flex items-center justify-between">
+          <!-- Quantity Stepper Controls -->
+          <div class="flex items-center space-x-1.5 bg-[#FAF6EE] p-1 rounded-xl border border-[#EFE7DA]">
+            <%= button_to cart_update_path(product_id: product.id, quantity: qty - 1), method: :patch, class: "w-6 h-6 rounded-lg bg-white hover:bg-[#EFE7DA] text-[#24130D] font-bold text-xs flex items-center justify-center shadow-xs transition-colors cursor-pointer" do %>
+              −
+            <% end %>
+            <span class="px-2 text-xs font-bold text-[#140B07] min-w-[20px] text-center"><%= qty %></span>
+            <%= button_to cart_update_path(product_id: product.id, quantity: qty + 1), method: :patch, class: "w-6 h-6 rounded-lg bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] font-bold text-xs flex items-center justify-center shadow-xs transition-colors cursor-pointer" do %>
+              +
+            <% end %>
+          </div>
+
+          <div class="text-right">
+            <span class="text-[10px] text-neutral-400 block">Unit: <%= product.formatted_price(current_currency) %></span>
+            <span class="text-sm font-bold text-[#9E472A]">
+              <%= CurrencyHelper.format_money(line_total, current_currency) %>
+            </span>
+          </div>
         </div>
       </div>
-      <%= button_to cart_remove_path(product_id: product.id), method: :delete, class: "text-neutral-400 hover:text-red-600 p-1" do %>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-      <% end %>
+    <% end %>
+  </div>
+
+  <!-- Drawer Footer: Subtotal, M-Pesa Checkout, Basket View -->
+  <div class="p-6 bg-white border-t border-[#EFE7DA] space-y-4 shadow-lg">
+    <div class="flex justify-between items-baseline">
+      <div>
+        <span class="text-xs text-neutral-600 block">Estimated Subtotal</span>
+        <span class="text-[11px] text-neutral-400">Customs included • Delivery at checkout</span>
+      </div>
+      <span class="font-serif font-bold text-2xl text-[#140B07]">
+        <%= format_currency(cart_subtotal, current_currency) %>
+      </span>
     </div>
-  <% end %>
+
+    <%= link_to new_checkout_path, data: { action: "click->cart#close" }, class: "w-full py-4 px-5 rounded-2xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-sm text-center flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transition-all cursor-pointer" do %>
+      <span>Proceed to M-Pesa Checkout</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+    <% end %>
+
+    <div class="flex items-center justify-between text-xs pt-1">
+      <%= link_to "View Detailed Basket Page", cart_path, data: { action: "click->cart#close" }, class: "font-semibold text-[#D48B38] hover:text-[#9E472A] underline" %>
+      <%= button_to "Clear Basket", cart_clear_path, method: :delete, data: { turbo_confirm: "Are you sure you want to empty your basket?" }, class: "text-neutral-400 hover:text-red-600 transition-colors cursor-pointer" %>
+    </div>
+  </div>
 <% end %>

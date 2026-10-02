@@ -2,6 +2,12 @@
   <%= cart_count %>
 <% end %>
 
-<%= turbo_stream.update "cart-drawer-items" do %>
+<%= turbo_stream.update "cart-drawer-content" do %>
   <%= render "carts/cart_drawer" %>
+<% end %>
+
+<%= turbo_stream.append "cart-drawer-content" do %>
+  <script>
+    document.dispatchEvent(new CustomEvent("cart:open"));
+  </script>
 <% end %>

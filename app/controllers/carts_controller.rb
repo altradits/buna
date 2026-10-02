@@ -21,6 +21,11 @@ class CartsController < ApplicationController
 
     @cart_items = load_cart_items
 
+    if params[:buy_now].present?
+      redirect_to new_checkout_path, status: :see_other
+      return
+    end
+
     respond_to do |format_mime|
       format_mime.turbo_stream
       format_mime.html { redirect_back(fallback_location: root_path, notice: "Added to your Buna ceremony basket.") }

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     delete :clear
   end
   post "cart/add", to: "carts#add", as: :cart_add
+  patch "cart/update", to: "carts#update", as: :cart_update
   delete "cart/remove", to: "carts#remove", as: :cart_remove
   delete "cart/clear", to: "carts#clear", as: :cart_clear
 

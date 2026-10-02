@@ -43,6 +43,9 @@ Rails.application.configure do
   # Assets
   config.assets.quiet = true if config.respond_to?(:assets)
 
+  # Allow all hosts in development
+  config.hosts.clear
+
   # Raise error on unpermitted parameters
   config.action_controller.action_on_unpermitted_parameters = :raise
 end

@@ -16,7 +16,10 @@
         <span class="px-3 py-1.5 rounded-full text-xs font-bold <%= @order.paid? ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300' %>">
           <%= @order.status.humanize %>
         </span>
-        <%= link_to "Print Receipt", "#", onclick: "window.print(); return false;", class: "text-xs text-neutral-600 hover:text-black underline" %>
+        <button type="button" onclick="window.print()" class="text-xs text-neutral-600 hover:text-black underline cursor-pointer flex items-center space-x-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Print Receipt</span>
+        </button>
       </div>
     </div>
 

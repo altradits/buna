@@ -1,0 +1,55 @@
+<div class="space-y-6 max-w-4xl mx-auto">
+  <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+    <div>
+      <h2 class="text-xl font-bold text-white">Order Details: <%= @order.order_number %></h2>
+      <p class="text-xs text-slate-400">Placed on <%= @order.created_at.strftime("%B %d, %Y at %H:%M EAT") %></p>
+    </div>
+    <div class="space-x-3 text-xs">
+      <%= link_to "← Back to Orders", admin_orders_path, class: "text-slate-400 hover:text-white" %>
+      <%= link_to "Customer View", order_path(@order), class: "text-amber-400 hover:underline" %>
+    </div>
+  </div>
+
+  <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800 space-y-6">
+    <div class="grid grid-cols-2 gap-4 text-xs">
+      <div><span class="text-slate-500">Customer:</span> <span class="text-white font-semibold"><%= @order.customer_name %></span></div>
+      <div><span class="text-slate-500">Email:</span> <span class="text-white"><%= @order.customer_email %></span></div>
+      <div><span class="text-slate-500">Phone (M-Pesa):</span> <span class="text-emerald-400 font-mono font-bold"><%= @order.customer_phone %></span></div>
+      <div><span class="text-slate-500">Status:</span> <span class="font-bold <%= @order.paid? ? 'text-emerald-400' : 'text-amber-400' %>"><%= @order.status.humanize %></span></div>
+      <div class="col-span-2"><span class="text-slate-500">Delivery Address:</span> <span class="text-white"><%= @order.delivery_address %>, <%= @order.delivery_city %>, <%= @order.delivery_county %></span></div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="pt-4 border-t border-slate-800 space-y-3">
+      <h3 class="text-sm font-bold text-white">Consignment Items</h3>
+      <table class="w-full text-xs text-left text-slate-300">
+        <thead class="text-slate-400 uppercase border-b border-slate-800">
+          <tr>
+            <th class="py-2">Product</th>
+            <th class="py-2">Format</th>
+            <th class="py-2">Qty</th>
+            <th class="py-2 text-right">Unit Price</th>
+            <th class="py-2 text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          <% @order.order_items.each do |item| %>
+            <tr>
+              <td class="py-2.5 text-white font-medium"><%= item.product.name %></td>
+              <td class="py-2.5 text-slate-400"><%= item.selected_format.presence || "Standard" %></td>
+              <td class="py-2.5"><%= item.quantity %></td>
+              <td class="py-2.5 text-right"><%= CurrencyHelper.format_money(item.unit_price_kes, "KES") %></td>
+              <td class="py-2.5 text-right font-bold text-white"><%= CurrencyHelper.format_money(item.total_price_kes, "KES") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+      <div class="pt-4 border-t border-slate-800 text-right text-xs space-y-1">
+        <div>Subtotal: <strong><%= CurrencyHelper.format_money(@order.subtotal_kes, "KES") %></strong></div>
+        <div>Cross-Border Shipping: <strong><%= CurrencyHelper.format_money(@order.shipping_fee_kes, "KES") %></strong></div>
+        <div class="text-base text-amber-400 font-bold pt-1">Total: <%= CurrencyHelper.format_money(@order.total_kes, "KES") %></div>
+      </div>
+    </div>
+  </div>
+</div>

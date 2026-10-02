@@ -1,5 +1,6 @@
 require "faraday"
 require "base64"
+require "ostruct"
 
 module Mpesa
   class StkPushService

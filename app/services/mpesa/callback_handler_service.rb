@@ -1,3 +1,5 @@
+require "ostruct"
+
 module Mpesa
   class CallbackHandlerService
     attr_reader :payload
