@@ -6,16 +6,17 @@
 PORT ?= 3000
 RAILS_ENV ?= development
 
-.PHONY: run dev stop kill-port setup seed console status help
+.PHONY: run dev stop kill-port setup seed console status check-deps install-deps help
 
 ## help: Display available targets
 help:
 	@echo "Yebente Buna (የበንቴ ቡና) - Management Commands"
 	@echo "==============================================="
-	@echo "  make run        - Kill any process on port $(PORT), clean stale PIDs, and start the app"
+	@echo "  make run        - Kill any process on port $(PORT), check dependencies, and start the app"
 	@echo "  make dev        - Kill port $(PORT) and start with Hotwire/Tailwind asset watcher"
 	@echo "  make stop       - Kill any process currently listening on port $(PORT)"
 	@echo "  make kill-port  - Force kill any process holding port $(PORT) and remove PID files"
+	@echo "  make check-deps - Verify whether gem bundle is installed"
 	@echo "  make setup      - Install bundle, prepare PostgreSQL database, and run seeds"
 	@echo "  make seed       - Seed product taxonomy (Sidamo, Yirgacheffe, Jebenas, Frankincense)"
 	@echo "  make console    - Launch Rails console in $(RAILS_ENV) mode"
@@ -38,13 +39,29 @@ kill-port:
 		rm -f tmp/pids/server.pid; \
 	fi
 
-## run: Kill any process on port $(PORT) then start the Rails application
-run: kill-port
+## check-deps: Check if gems are installed, or provide one-liner fix
+check-deps:
+	@if ! bundle check >/dev/null 2>&1; then \
+		echo "==> Missing gem dependencies detected. Attempting bundle install..."; \
+		bundle install || { \
+			echo ""; \
+			echo "=========================================================================="; \
+			echo "NOTICE: Building native extensions (pg, puma, etc.) requires system headers."; \
+			echo "Please execute this one-liner in your terminal:"; \
+			echo "    sudo apt update && sudo apt install -y ruby-dev libpq-dev && bundle install"; \
+			echo "Then re-run: make run"; \
+			echo "=========================================================================="; \
+			exit 1; \
+		}; \
+	fi
+
+## run: Kill any process on port $(PORT), verify dependencies, then start Rails
+run: kill-port check-deps
 	@echo "==> Starting Yebente Buna application on http://localhost:$(PORT) (Env: $(RAILS_ENV))..."
 	@PORT=$(PORT) bin/rails server -b 0.0.0.0 -p $(PORT)
 
 ## dev: Kill port $(PORT) and start development environment
-dev: kill-port
+dev: kill-port check-deps
 	@echo "==> Launching Yebente Buna development environment..."
 	@bin/dev
 
