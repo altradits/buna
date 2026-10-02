@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-buna-parchment text-buna-dark antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight text-buna-dark;
+  }
+}
+
+@layer components {
+  .btn-buna-primary {
+    @apply inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-buna-roast text-buna-gold font-medium hover:bg-buna-dark transition-all duration-200 shadow-sm active:scale-95;
+  }
+
+  .btn-mpesa {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg bg-safaricom-green text-white font-semibold hover:bg-safaricom-hover transition-all duration-200 shadow-md hover:shadow-lg active:scale-95;
+  }
+
+  .badge-category {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-buna-sand text-buna-roast border border-buna-clay/20;
+  }
+
+  .badge-roast {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-buna-espresso text-buna-gold;
+  }
+
+  .buna-glass-card {
+    @apply bg-white/90 backdrop-blur-sm border border-buna-sand/60 rounded-xl shadow-buna-soft hover:shadow-buna-card transition-all duration-300;
+  }
+
+  .pulse-stk {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes pulse-ring {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: .7;
+    transform: scale(1.05);
+  }
+}

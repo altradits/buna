@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+require "fileutils"
+
+APP_ROOT = File.expand_path("..", __dir__)
+
+def system!(*args)
+  system(*args, exception: true)
+end
+
+FileUtils.chdir APP_ROOT do
+  puts "== Installing Ruby and Node dependencies =="
+  system! "gem install bundler --conservative"
+  system("bundle check") || system!("bundle install")
+
+  puts "\n== Copying sample environment file if missing =="
+  unless File.exist?(".env")
+    FileUtils.cp ".env.example", ".env"
+    puts "Copied .env.example to .env"
+  end
+
+  puts "\n== Preparing database and running migrations =="
+  system! "bin/rails db:prepare"
+
+  puts "\n== Seeding authentic Ethiopian product taxonomy =="
+  system! "bin/rails db:seed"
+
+  puts "\n== Removing old logs and tempfiles =="
+  system! "bin/rails log:clear tmp:clear"
+
+  puts "\n== Yebente Buna setup complete! =="
+  puts "Start server with: bin/rails server -p 3000"
+end

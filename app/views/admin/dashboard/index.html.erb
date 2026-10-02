@@ -1,0 +1,119 @@
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-white">Commercial & Operations Dashboard</h2>
+      <p class="text-xs text-slate-400">Regional sales analytics, M-Pesa settlements, and cross-border shipments.</p>
+    </div>
+    <div class="text-xs text-amber-400 font-mono">
+      Timezone: Africa/Nairobi (<%= Time.current.strftime("%H:%M:%S EAT") %>)
+    </div>
+  </div>
+
+  <!-- KPI Metric Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+      <span class="text-xs text-slate-400 uppercase font-semibold">Total Revenue (KES)</span>
+      <div class="text-2xl font-bold text-emerald-400 mt-2"><%= CurrencyHelper.format_money(@total_revenue_kes, "KES") %></div>
+      <div class="text-[11px] text-slate-500 mt-1">Paid customer checkouts</div>
+    </div>
+
+    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+      <span class="text-xs text-slate-400 uppercase font-semibold">Total Revenue (ETB)</span>
+      <div class="text-2xl font-bold text-amber-400 mt-2"><%= CurrencyHelper.format_money(@total_revenue_etb, "ETB") %></div>
+      <div class="text-[11px] text-slate-500 mt-1">Converted at 0.88 ETB/KES</div>
+    </div>
+
+    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+      <span class="text-xs text-slate-400 uppercase font-semibold">Confirmed Orders</span>
+      <div class="text-2xl font-bold text-white mt-2"><%= @paid_orders_count %></div>
+      <div class="text-[11px] text-slate-500 mt-1"><%= @pending_orders_count %> pending payment</div>
+    </div>
+
+    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+      <span class="text-xs text-slate-400 uppercase font-semibold">Active Consignments</span>
+      <div class="text-2xl font-bold text-blue-400 mt-2"><%= @active_shipments.count %></div>
+      <div class="text-[11px] text-slate-500 mt-1">Moyale Corridor in transit</div>
+    </div>
+  </div>
+
+  <!-- Recent Orders Table -->
+  <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+    <h3 class="text-base font-bold text-white">Recent Customer Consignments</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs text-left text-slate-300">
+        <thead class="text-slate-400 uppercase border-b border-slate-800">
+          <tr>
+            <th class="py-3 px-4">Order #</th>
+            <th class="py-3 px-4">Customer</th>
+            <th class="py-3 px-4">Phone (M-Pesa)</th>
+            <th class="py-3 px-4">Destination</th>
+            <th class="py-3 px-4">Amount</th>
+            <th class="py-3 px-4">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          <% if @recent_orders.empty? %>
+            <tr><td colspan="6" class="py-6 text-center text-slate-500">No customer orders placed yet.</td></tr>
+          <% else %>
+            <% @recent_orders.each do |order| %>
+              <tr class="hover:bg-slate-800/50">
+                <td class="py-3 px-4 font-mono text-amber-400"><%= link_to order.order_number, order_path(order) %></td>
+                <td class="py-3 px-4"><%= order.customer_name %></td>
+                <td class="py-3 px-4 font-mono"><%= order.customer_phone %></td>
+                <td class="py-3 px-4"><%= order.delivery_city %>, <%= order.delivery_county %></td>
+                <td class="py-3 px-4 font-bold text-white"><%= CurrencyHelper.format_money(order.total_kes, "KES") %></td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold <%= order.paid? ? 'bg-emerald-900/60 text-emerald-300' : 'bg-amber-900/60 text-amber-300' %>">
+                    <%= order.status.humanize %>
+                  </span>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Recent Safaricom M-Pesa IPN Transactions -->
+  <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+    <h3 class="text-base font-bold text-white">Safaricom Daraja IPN Transaction Log</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs text-left text-slate-300">
+        <thead class="text-slate-400 uppercase border-b border-slate-800">
+          <tr>
+            <th class="py-3 px-4">Receipt #</th>
+            <th class="py-3 px-4">Type</th>
+            <th class="py-3 px-4">Phone</th>
+            <th class="py-3 px-4">Amount (KES)</th>
+            <th class="py-3 px-4">Result Code</th>
+            <th class="py-3 px-4">Status</th>
+            <th class="py-3 px-4">Date</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-800">
+          <% if @recent_mpesa_transactions.empty? %>
+            <tr><td colspan="7" class="py-6 text-center text-slate-500">No M-Pesa transactions logged yet.</td></tr>
+          <% else %>
+            <% @recent_mpesa_transactions.each do |tx| %>
+              <tr class="hover:bg-slate-800/50">
+                <td class="py-3 px-4 font-mono text-emerald-400"><%= tx.mpesa_receipt_number.presence || tx.checkout_request_id %></td>
+                <td class="py-3 px-4"><%= tx.transaction_type %></td>
+                <td class="py-3 px-4 font-mono"><%= tx.phone_number %></td>
+                <td class="py-3 px-4 font-bold text-white"><%= CurrencyHelper.format_money(tx.amount, "KES") %></td>
+                <td class="py-3 px-4 font-mono"><%= tx.result_code || "pending" %></td>
+                <td class="py-3 px-4">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-semibold <%= tx.success? ? 'bg-emerald-900/60 text-emerald-300' : 'bg-rose-900/60 text-rose-300' %>">
+                    <%= tx.status %>
+                  </span>
+                </td>
+                <td class="py-3 px-4 text-slate-400"><%= (tx.transaction_date || tx.created_at).strftime("%d/%m/%Y %H:%M") %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

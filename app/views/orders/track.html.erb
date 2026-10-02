@@ -1,0 +1,66 @@
+<div class="py-12 bg-[#FAF6EE]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    
+    <!-- Title & Tracking Code -->
+    <div class="border-b border-[#EFE7DA] pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <span class="text-xs font-bold text-[#9E472A] uppercase tracking-widest">East African Cross-Border Logistics</span>
+        <h1 class="font-serif text-3xl font-bold text-[#140B07]">Consignment Route Tracking</h1>
+        <p class="text-xs text-neutral-600 mt-1">Waybill #<strong class="text-[#24130D]"><%= @shipment.tracking_number %></strong> • Order #<%= @order.order_number %></p>
+      </div>
+
+      <div class="text-right">
+        <span class="text-xs text-neutral-500 block">Courier Partner</span>
+        <span class="font-bold text-sm text-[#00A859]"><%= @shipment.courier_provider %></span>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-6">
+      <div class="flex justify-between items-center text-xs font-semibold text-[#140B07]">
+        <span>Origin: Addis Ababa (Ethiopia)</span>
+        <span>Destination: <%= @order.delivery_city %>, Kenya</span>
+      </div>
+
+      <!-- Linear visual track -->
+      <div class="w-full bg-[#EFE7DA] h-2.5 rounded-full overflow-hidden">
+        <div class="bg-gradient-to-r from-[#D48B38] to-[#00A859] h-full rounded-full transition-all duration-500" style="width: <%= @shipment.progress_percentage %>%"></div>
+      </div>
+
+      <!-- Checkpoints Timeline -->
+      <div class="relative border-l-2 border-[#D48B38]/40 ml-4 pl-6 space-y-8 pt-4">
+        <% @checkpoints.each_with_index do |cp, idx| %>
+          <% is_passed = idx <= (@checkpoints.index { |c| c[:code] == @shipment.status } || 0) %>
+          <% is_current = cp[:code] == @shipment.status %>
+
+          <div class="relative group">
+            <!-- Node Pin -->
+            <div class="absolute -left-[31px] top-0 w-4 h-4 rounded-full border-2 <%= is_current ? 'bg-[#00A859] border-white ring-4 ring-[#00A859]/30' : (is_passed ? 'bg-[#D48B38] border-white' : 'bg-white border-[#D48B38]/40') %>"></div>
+            
+            <div class="space-y-1">
+              <div class="flex items-center space-x-2">
+                <h4 class="font-serif font-bold text-sm <%= is_current ? 'text-[#00A859]' : (is_passed ? 'text-[#140B07]' : 'text-neutral-400') %>">
+                  <%= cp[:label] %>
+                </h4>
+                <span class="text-xs text-[#D48B38] font-amharic font-medium">(<%= cp[:amharic] %>)</span>
+                <% if is_current %>
+                  <span class="px-2 py-0.5 rounded-full bg-[#00A859]/10 text-[#00A859] text-[10px] font-bold">Current Checkpoint</span>
+                <% end %>
+              </div>
+              <p class="text-xs <%= is_passed ? 'text-neutral-600' : 'text-neutral-400' %>">
+                <%= cp[:desc] %>
+              </p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+    </div>
+
+    <!-- Back Navigation -->
+    <div class="text-center pt-4">
+      <%= link_to "← Back to Order Summary", order_path(@order), class: "text-xs font-semibold text-[#D48B38] hover:text-[#9E472A] underline" %>
+    </div>
+
+  </div>
+</div>

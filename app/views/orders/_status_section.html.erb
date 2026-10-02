@@ -1,0 +1,80 @@
+<div id="order_status_section" class="bg-white p-6 sm:p-8 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-6">
+  
+  <% if order.paid? %>
+    <!-- Paid Success Banner -->
+    <div class="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-[#00A859] text-white flex items-center justify-center font-bold text-lg shadow-sm">
+          ✓
+        </div>
+        <div>
+          <h2 class="font-serif text-xl font-bold text-[#006C38]">Payment Confirmed via Safaricom M-Pesa!</h2>
+          <p class="text-xs text-emerald-700">Receipt: <strong><%= order.mpesa_transaction&.mpesa_receipt_number.presence || "MPESA-CONFIRMED" %></strong></p>
+        </div>
+      </div>
+      <p class="text-xs text-emerald-800 leading-relaxed">
+        Your payment of <strong><%= CurrencyHelper.format_money(order.total_kes, "KES") %></strong> has been received by Yebente Buna. Your consignment is being packaged at the Addis Ababa Bole Hub for dispatch across the Moyale cross-border corridor.
+      </p>
+
+      <div class="pt-2 flex flex-wrap gap-3">
+        <%= link_to track_order_path(order), class: "px-5 py-2.5 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white text-xs font-bold shadow transition-all inline-flex items-center space-x-2" do %>
+          <span>Track Cross-Border Delivery</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <% end %>
+      </div>
+    </div>
+
+  <% elsif order.status == "payment_processing" || order.status == "pending_payment" %>
+    <!-- Pending STK Push State -->
+    <div class="p-6 rounded-2xl bg-[#FAF6EE] border border-[#D48B38]/40 space-y-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-full bg-[#00A859] text-white flex items-center justify-center font-bold pulse-stk shadow-md">
+          📱
+        </div>
+        <div>
+          <h2 class="font-serif text-xl font-bold text-[#140B07]">Awaiting M-Pesa PIN Confirmation...</h2>
+          <p class="text-xs text-neutral-600">STK Push dispatched to Safaricom MSISDN: <strong class="text-[#00A859]"><%= order.customer_phone %></strong></p>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-xl border border-[#EFE7DA] space-y-2 text-xs text-neutral-700">
+        <p class="font-semibold text-[#140B07]">What to do now:</p>
+        <ol class="list-decimal list-inside space-y-1 text-neutral-600">
+          <li>Check your phone screen for the Safaricom M-Pesa prompt.</li>
+          <li>Confirm amount <strong><%= CurrencyHelper.format_money(order.total_kes, "KES") %></strong> for Yebente Buna.</li>
+          <li>Enter your 4-digit M-Pesa PIN and press Send.</li>
+        </ol>
+      </div>
+
+      <!-- Fallback C2B Paybill Instructions -->
+      <div class="p-4 rounded-xl bg-neutral-50 border border-neutral-200 text-xs text-neutral-600 space-y-1">
+        <div class="font-bold text-[#140B07]">Didn't receive the prompt? Pay via Paybill:</div>
+        <p>Business Number (Paybill): <strong class="text-[#00A859]">174379</strong></p>
+        <p>Account Number: <strong class="text-[#24130D]"><%= order.order_number %></strong></p>
+        <p>Amount: <strong><%= CurrencyHelper.format_money(order.total_kes, "KES") %></strong></p>
+      </div>
+
+      <!-- Retry STK Push Form -->
+      <div class="pt-2">
+        <%= form_with url: retry_stk_order_path(order), method: :post, local: true, class: "flex items-center space-x-2" do |f| %>
+          <%= f.telephone_field :phone_number, value: order.customer_phone, class: "text-xs p-2.5 rounded-lg border border-[#EFE7DA] bg-white text-neutral-800 focus:outline-none focus:ring-2 focus:ring-[#00A859] w-48" %>
+          <%= f.submit "Retry STK Push", class: "px-4 py-2.5 rounded-lg bg-[#00A859] hover:bg-[#008F4C] text-white text-xs font-semibold cursor-pointer shadow transition-all" %>
+        <% end %>
+      </div>
+    </div>
+
+  <% else %>
+    <!-- Failed or Cancelled State -->
+    <div class="p-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 space-y-2">
+      <h2 class="font-serif text-lg font-bold text-rose-800">Transaction Not Completed</h2>
+      <p class="text-xs text-rose-700">The M-Pesa request timed out or was cancelled by user.</p>
+      <div class="pt-2">
+        <%= form_with url: retry_stk_order_path(order), method: :post, local: true do |f| %>
+          <%= f.hidden_field :phone_number, value: order.customer_phone %>
+          <%= f.submit "Re-Send M-Pesa Prompt", class: "px-4 py-2 bg-[#00A859] text-white rounded-lg text-xs font-semibold cursor-pointer" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

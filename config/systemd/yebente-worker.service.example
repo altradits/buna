@@ -1,0 +1,17 @@
+[Unit]
+Description=Yebente Buna Background Worker (Solid Queue)
+After=network.target postgresql.service yebente-web.service
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/var/www/yebente/current
+EnvironmentFile=/var/www/yebente/shared/.env
+Environment=RAILS_ENV=production
+
+ExecStart=/usr/local/bin/bundle exec rake solid_queue:start
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

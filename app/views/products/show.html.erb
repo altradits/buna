@@ -1,0 +1,167 @@
+<div class="py-12 bg-[#FAF6EE]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    
+    <!-- Breadcrumbs -->
+    <nav class="flex items-center space-x-2 text-xs text-neutral-500">
+      <%= link_to "Home", root_path, class: "hover:text-[#9E472A]" %>
+      <span>/</span>
+      <%= link_to "Products", products_path, class: "hover:text-[#9E472A]" %>
+      <span>/</span>
+      <%= link_to @product.category.name, products_path(category: @product.category.slug), class: "hover:text-[#9E472A]" %>
+      <span>/</span>
+      <span class="text-[#140B07] font-semibold"><%= @product.name %></span>
+    </nav>
+
+    <!-- Main Product Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      
+      <!-- Visual Display -->
+      <div class="lg:col-span-6 bg-white p-8 sm:p-12 rounded-3xl border border-[#EFE7DA] shadow-sm flex flex-col items-center justify-center text-center">
+        <div class="w-48 h-48 sm:w-64 sm:h-64 rounded-2xl bg-gradient-to-br from-[#FAF6EE] to-[#EFE7DA] border border-[#EFE7DA] flex items-center justify-center p-6 shadow-inner">
+          <% if @product.coffee? %>
+            <div class="space-y-2">
+              <span class="text-4xl">☕</span>
+              <div class="font-serif font-bold text-xl text-[#24130D]"><%= @product.origin_zone %></div>
+              <div class="text-xs text-[#9E472A] font-amharic font-semibold"><%= @product.amharic_name %></div>
+            </div>
+          <% else %>
+            <div class="space-y-2">
+              <span class="text-4xl">🏺</span>
+              <div class="font-serif font-bold text-xl text-[#24130D]"><%= @product.name %></div>
+              <div class="text-xs text-[#9E472A] font-amharic font-semibold"><%= @product.amharic_name %></div>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-8 flex items-center space-x-6 text-xs text-neutral-500">
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-[#00A859]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Sourced in Ethiopia
+          </span>
+          <span class="flex items-center">
+            <svg class="w-4 h-4 mr-1 text-[#00A859]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            Customs Cleared at Moyale
+          </span>
+        </div>
+      </div>
+
+      <!-- Purchase & Specification Details -->
+      <div class="lg:col-span-6 space-y-6">
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-[#EFE7DA] text-[#9E472A] text-xs font-bold">
+              <%= @product.category.name %>
+            </span>
+            <span class="text-xs text-neutral-400">SKU: <%= @product.sku %></span>
+          </div>
+
+          <h1 class="font-serif text-3xl sm:text-4xl font-bold text-[#140B07] mt-2"><%= @product.name %></h1>
+          <div class="text-base text-[#D48B38] font-amharic font-semibold mt-1"><%= @product.amharic_name %></div>
+        </div>
+
+        <!-- Pricing -->
+        <div class="p-4 rounded-2xl bg-white border border-[#EFE7DA] flex items-center justify-between">
+          <div>
+            <span class="text-xs text-neutral-500 block">Unit Price (<%= current_currency %>)</span>
+            <span class="font-serif text-3xl font-bold text-[#140B07]"><%= @product.formatted_price(current_currency) %></span>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-[#00A859] font-bold block">✓ Available for Kenyan Dispatch</span>
+            <span class="text-[11px] text-neutral-500">M-Pesa Express Checkout Ready</span>
+          </div>
+        </div>
+
+        <p class="text-sm text-neutral-700 leading-relaxed">
+          <%= @product.description %>
+        </p>
+
+        <!-- Technical Taxonomy Grid -->
+        <% if @product.coffee? %>
+          <div class="grid grid-cols-2 gap-3 p-4 rounded-2xl bg-white border border-[#EFE7DA] text-xs">
+            <% if @product.origin_zone.present? %>
+              <div><strong class="text-neutral-500 block text-[10px] uppercase">Origin Zone</strong> <span class="font-semibold text-[#140B07]"><%= @product.origin_zone %></span></div>
+            <% end %>
+            <% if @product.roast_profile.present? %>
+              <div><strong class="text-neutral-500 block text-[10px] uppercase">Roast Profile</strong> <span class="font-semibold text-[#140B07]"><%= @product.roast_profile %></span></div>
+            <% end %>
+            <% if @product.processing_method.present? %>
+              <div><strong class="text-neutral-500 block text-[10px] uppercase">Processing Method</strong> <span class="font-semibold text-[#140B07]"><%= @product.processing_method %></span></div>
+            <% end %>
+            <% if @product.elevation.present? %>
+              <div><strong class="text-neutral-500 block text-[10px] uppercase">Elevation</strong> <span class="font-semibold text-[#140B07]"><%= @product.elevation %></span></div>
+            <% end %>
+            <% if @product.tasting_notes.present? %>
+              <div class="col-span-2"><strong class="text-neutral-500 block text-[10px] uppercase">Tasting Notes</strong> <span class="font-semibold text-[#9E472A]"><%= @product.tasting_notes %></span></div>
+            <% end %>
+          </div>
+        <% elsif @product.material.present? %>
+          <div class="p-4 rounded-2xl bg-white border border-[#EFE7DA] text-xs space-y-2">
+            <div><strong class="text-neutral-500 block text-[10px] uppercase">Material & Craft</strong> <span class="font-semibold text-[#140B07]"><%= @product.material %></span></div>
+            <% if @product.dimensions.present? %>
+              <div><strong class="text-neutral-500 block text-[10px] uppercase">Dimensions</strong> <span class="font-semibold text-[#140B07]"><%= @product.dimensions %></span></div>
+            <% end %>
+            <% if @product.cultural_significance.present? %>
+              <div><strong class="text-neutral-500 block text-[10px] uppercase">Ceremony Significance</strong> <p class="text-neutral-600 mt-0.5"><%= @product.cultural_significance %></p></div>
+            <% end %>
+          </div>
+        <% end %>
+
+        <!-- Add to Cart Form -->
+        <%= form_with url: cart_add_path, method: :post, local: false, class: "space-y-4 pt-2" do |f| %>
+          <%= f.hidden_field :product_id, value: @product.id %>
+
+          <div class="grid grid-cols-2 gap-4">
+            <% if @product.coffee? %>
+              <div>
+                <label class="block text-xs font-semibold text-neutral-700 mb-1">Select Format</label>
+                <%= f.select :format_selected, [["Roasted Whole Beans", "Roasted Whole Beans"], ["Fine Ground (Jebena Spec)", "Ground"], ["Raw Green Beans (Home Roast)", "Raw Green Beans"]], {}, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-white text-neutral-800 focus:ring-2 focus:ring-[#D48B38]" %>
+              </div>
+            <% else %>
+              <div>
+                <label class="block text-xs font-semibold text-neutral-700 mb-1">Artifact Spec</label>
+                <input type="text" readonly value="Authentic Handcrafted" class="w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-[#FAF6EE] text-neutral-600">
+              </div>
+            <% end %>
+
+            <div>
+              <label class="block text-xs font-semibold text-neutral-700 mb-1">Quantity</label>
+              <%= f.number_field :quantity, value: 1, min: 1, max: 20, class: "w-full text-xs p-3 rounded-xl border border-[#EFE7DA] bg-white text-neutral-800 focus:ring-2 focus:ring-[#D48B38]" %>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-4 pt-2">
+            <%= f.submit "Add to Ceremony Basket", class: "flex-1 py-4 px-6 rounded-xl bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] font-bold text-sm shadow-md transition-all cursor-pointer" %>
+            
+            <%= link_to new_checkout_path, class: "py-4 px-6 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-sm shadow-md transition-all text-center whitespace-nowrap" do %>
+              Instant M-Pesa Checkout
+            <% end %>
+          </div>
+        <% end %>
+
+      </div>
+
+    </div>
+
+    <!-- Related Products -->
+    <% if @related_products.any? %>
+      <div class="pt-12 border-t border-[#EFE7DA] space-y-6">
+        <h3 class="font-serif text-2xl font-bold text-[#140B07]">Complementary Ceremony Artifacts</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <% @related_products.each do |rel| %>
+            <div class="bg-white p-5 rounded-2xl border border-[#EFE7DA] flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] text-[#9E472A] font-bold uppercase"><%= rel.category.name %></div>
+                <h4 class="font-serif font-bold text-sm text-[#140B07] mt-1"><%= link_to rel.name, product_path(rel), class: "hover:text-[#9E472A]" %></h4>
+              </div>
+              <div class="pt-3 mt-3 border-t border-[#EFE7DA] flex items-center justify-between">
+                <span class="font-bold text-sm text-[#140B07]"><%= rel.formatted_price(current_currency) %></span>
+                <%= link_to "View", product_path(rel), class: "text-xs font-semibold text-[#D48B38] hover:underline" %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>

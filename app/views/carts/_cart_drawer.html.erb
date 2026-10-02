@@ -1,0 +1,32 @@
+<% if current_cart.empty? %>
+  <div class="text-center py-16 text-[#3A2016]">
+    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[#EFE7DA] flex items-center justify-center text-[#9E472A]">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+    </div>
+    <h4 class="font-serif text-lg font-semibold text-[#140B07]">Your basket is empty</h4>
+    <p class="text-xs text-neutral-600 mt-1 max-w-xs mx-auto">Explore fresh Sidamo roasts, handcrafted clay Jebenas, and ceremonial Frankincense.</p>
+    <div class="mt-6">
+      <%= link_to "Browse Coffee Varieties", products_path(category: "coffee-varieties"), class: "inline-flex px-5 py-2.5 rounded-lg bg-[#24130D] text-[#E5A652] text-xs font-semibold hover:bg-[#140B07]" %>
+    </div>
+  </div>
+<% else %>
+  <% current_cart.each do |product_id, item| %>
+    <% product = Product.find_by(id: product_id) %>
+    <% next unless product %>
+    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white border border-[#EFE7DA] shadow-sm">
+      <div class="flex-1 pr-3">
+        <h5 class="text-sm font-semibold text-[#140B07]"><%= product.name %></h5>
+        <div class="text-xs text-neutral-500 flex flex-wrap gap-1 mt-0.5">
+          <% if item["format"].present? %><span class="bg-[#EFE7DA] px-1.5 py-0.5 rounded text-[10px]"><%= item["format"] %></span><% end %>
+          <% if item["roast"].present? %><span class="bg-[#24130D] text-[#E5A652] px-1.5 py-0.5 rounded text-[10px]"><%= item["roast"] %></span><% end %>
+        </div>
+        <div class="text-xs font-bold text-[#9E472A] mt-1">
+          Qty: <%= item["quantity"] %> × <%= product.formatted_price(current_currency) %>
+        </div>
+      </div>
+      <%= button_to cart_remove_path(product_id: product.id), method: :delete, class: "text-neutral-400 hover:text-red-600 p-1" do %>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

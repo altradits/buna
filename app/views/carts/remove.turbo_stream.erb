@@ -1,0 +1,7 @@
+<%= turbo_stream.update "cart-counter-badge" do %>
+  <%= cart_count %>
+<% end %>
+
+<%= turbo_stream.update "cart-drawer-items" do %>
+  <%= render "carts/cart_drawer" %>
+<% end %>

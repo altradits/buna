@@ -1,0 +1,22 @@
+[Unit]
+Description=Yebente Buna Rails Web Server (Puma)
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=deploy
+WorkingDirectory=/var/www/yebente/current
+EnvironmentFile=/var/www/yebente/shared/.env
+Environment=RAILS_ENV=production
+Environment=PORT=3000
+
+ExecStart=/usr/local/bin/bundle exec puma -C config/puma.rb
+ExecReload=/bin/kill -USR1 $MAINPID
+Restart=always
+RestartSec=5
+
+# Resource limits
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
