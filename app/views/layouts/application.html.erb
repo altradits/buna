@@ -3,7 +3,7 @@
 <head>
   <title><%= ENV.fetch("APP_NAME", "Yebente Buna") %> | Premium Authentic Ethiopian Coffee & Cultural Ceremony in Kenya</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Direct from Ethiopian highlands to Kenya: Authentic single-origin coffee (Yirgacheffe, Sidamo, Harrar, Limu, Kaffa), traditional clay Jebena pots, Sini cups, and ceremony incense. Pay seamlessly with Safaricom M-Pesa.">
+  <meta name="description" content="Direct from Ethiopian highlands to Kenya: Authentic single-origin coffee, traditional clay Jebena pots, Sini cups, and ceremony incense.">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
@@ -31,11 +31,6 @@
               parchment: '#FAF6EE',
               card: '#FDFBF7',
               forest: '#183822'
-            },
-            safaricom: {
-              green: '#00A859',
-              hover: '#008F4C',
-              dark: '#006C38'
             }
           },
           fontFamily: {
@@ -54,42 +49,31 @@
   <style>
     body { background-color: #FAF6EE; color: #140B07; }
     .font-serif { font-family: 'Playfair Display', Georgia, serif; }
-    .pulse-stk { animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-    @keyframes pulse-ring {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .7; transform: scale(1.03); }
-    }
   </style>
 </head>
 
 <body class="min-h-full flex flex-col font-sans bg-[#FAF6EE] text-[#140B07]" data-controller="cart">
   
-  <!-- Top Utility Bar: Compact & Minimal -->
+  <!-- Top Utility Bar: Clean & Minimal -->
   <div class="bg-[#24130D] text-[#EFE7DA] text-[11px] py-1.5 px-4 border-b border-[#3A2016]">
     <div class="max-w-7xl mx-auto flex justify-between items-center">
       <div class="flex items-center space-x-3 text-neutral-300">
-        <span class="inline-flex items-center text-[#E5A652] font-medium">
-          ☕ Direct Addis Ababa ➔ Nairobi Corridor
+        <span class="text-[#E5A652] font-medium">
+          Addis Ababa ➔ Nairobi Corridor
         </span>
         <span class="hidden md:inline text-[#3A2016]">|</span>
-        <span class="hidden md:inline text-neutral-400">Merchant Support: <strong class="text-white">+254707172370</strong></span>
+        <span class="hidden md:inline text-neutral-400">Support: <strong class="text-white">+254707172370</strong></span>
       </div>
 
       <div class="flex items-center space-x-3">
         <!-- Multi-Currency Switcher KES / ETB -->
         <div class="flex items-center bg-[#140B07] rounded-md p-0.5 border border-[#3A2016]" data-controller="currency">
           <%= button_to switch_currency_path(currency: "KES"), method: :post, class: "px-2 py-0.5 text-[10px] font-semibold rounded #{current_currency == 'KES' ? 'bg-[#D48B38] text-white' : 'text-neutral-400 hover:text-white'}" do %>
-            🇰🇪 KES
+            KES
           <% end %>
           <%= button_to switch_currency_path(currency: "ETB"), method: :post, class: "px-2 py-0.5 text-[10px] font-semibold rounded #{current_currency == 'ETB' ? 'bg-[#D48B38] text-white' : 'text-neutral-400 hover:text-white'}" do %>
-            🇪🇹 ETB
+            ETB
           <% end %>
-        </div>
-
-        <!-- M-Pesa Verified Badge -->
-        <div class="hidden sm:inline-flex items-center text-[#00A859] font-medium text-[11px]">
-          <span class="w-1.5 h-1.5 rounded-full bg-[#00A859] mr-1.5"></span>
-          M-Pesa Express
         </div>
       </div>
     </div>
@@ -158,18 +142,16 @@
     </div>
   </header>
 
-  <!-- Flash Notifications -->
+  <!-- Flash Notifications: Clean & Icon-free -->
   <% if notice.present? %>
-    <div class="bg-[#183822] text-[#FAF6EE] px-4 py-2 text-center text-xs font-medium flex items-center justify-center space-x-2 border-b border-[#2A5A38]">
-      <svg class="w-4 h-4 text-[#00A859]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-      <span><%= notice %></span>
+    <div class="bg-[#183822] text-[#FAF6EE] px-4 py-2 text-center text-xs font-medium border-b border-[#2A5A38]">
+      <%= notice %>
     </div>
   <% end %>
 
   <% if alert.present? %>
-    <div class="bg-[#9E472A] text-white px-4 py-2 text-center text-xs font-medium flex items-center justify-center space-x-2 border-b border-[#B55A3C]">
-      <svg class="w-4 h-4 text-amber-200" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
-      <span><%= alert %></span>
+    <div class="bg-[#9E472A] text-white px-4 py-2 text-center text-xs font-medium border-b border-[#B55A3C]">
+      <%= alert %>
     </div>
   <% end %>
 
@@ -253,7 +235,6 @@
           <div class="text-xs space-y-1 text-neutral-400">
             <p>Hotline: <strong class="text-white">+254707172370</strong></p>
             <p>Email: <strong class="text-white">yebente@gmail.com</strong></p>
-            <p>Payments: M-Pesa Express & Paybill 174379</p>
             <div class="pt-1.5">
               <%= link_to "Admin Operations Dashboard", admin_root_path, class: "text-neutral-400 hover:text-white underline text-[11px]" %>
             </div>
