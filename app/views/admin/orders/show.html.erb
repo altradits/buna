@@ -5,7 +5,7 @@
       <p class="text-xs text-slate-400">Placed on <%= @order.created_at.strftime("%B %d, %Y at %H:%M EAT") %></p>
     </div>
     <div class="space-x-3 text-xs">
-      <%= link_to "← Back to Orders", admin_orders_path, class: "text-slate-400 hover:text-white" %>
+      <%= link_to "Back to Orders", admin_orders_path, class: "text-slate-400 hover:text-white" %>
       <%= link_to "Storefront View", order_path(@order), class: "text-amber-400 hover:underline" %>
     </div>
   </div>
