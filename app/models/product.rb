@@ -53,6 +53,68 @@ class Product < ApplicationRecord
     CurrencyHelper.format_money(price_in(currency), currency)
   end
 
+  def display_image_url
+    return image_url if image_url.present?
+
+    s = slug.to_s.downcase
+    case s
+    when /raw-green-beans/
+      "/images/products/coffee-green-beans.jpg"
+    when /fine-ground|jebena-fine-ground|ground-format/
+      "/images/products/coffee-ground.jpg"
+    when /heirloom|roasted-whole-beans|dark-roast|medium-roast|bensa|longberry|highland-forest|biosphere/
+      "/images/products/coffee-roasted-beans.jpg"
+    when /gondar-clay-jebena/
+      "/images/products/jebena-gondar.jpg"
+    when /harari.*jebena/
+      "/images/products/jebena-harari.jpg"
+    when /menkeshkesh/
+      "/images/products/menkeshkesh-pan.jpg"
+    when /fernello/
+      "/images/products/fernello-brazier.jpg"
+    when /kettle|brass-pouring/
+      "/images/products/jebena-gondar.jpg"
+    when /sini|cini/
+      "/images/products/sini-cups-set.jpg"
+    when /rekebot/
+      "/images/products/rekebot-table.jpg"
+    when /mashesha|stirring/
+      "/images/products/mashesha-stirrer.jpg"
+    when /conical-burr|electric-grinder/
+      "/images/products/electric-grinder.jpg"
+    when /travel-grinder|brass-cylindrical/
+      "/images/products/brass-hand-grinder.jpg"
+    when /hand-mill|manual-buna-grinder/
+      "/images/products/cast-iron-grinder.jpg"
+    when /frankincense|etan/
+      "/images/products/frankincense-resin.jpg"
+    when /burner|gidich|mubakhar/
+      "/images/products/clay-incense-burner.jpg"
+    when /myrrh|karbe/
+      "/images/products/myrrh-resin.jpg"
+    when /tenadam|rue/
+      "/images/products/tenadam-herbs.jpg"
+    when /korerima|spice/
+      "/images/products/korerima-spice.jpg"
+    when /coals|olive-wood-shavings/
+      "/images/products/olive-wood-coals.jpg"
+    when /ketema/
+      "/images/products/ketema-floor-mat.jpg"
+    when /tibeb/
+      "/images/products/tibeb-table-runner.jpg"
+    when /barchuma/
+      "/images/products/wooden-barchuma-stool.jpg"
+    when /cushion|pouf/
+      "/images/products/velvet-floor-cushion.jpg"
+    else
+      if coffee?
+        bean_format == "Raw Green Beans" ? "/images/products/coffee-green-beans.jpg" : "/images/products/coffee-roasted-beans.jpg"
+      else
+        "/images/products/jebena-gondar.jpg"
+      end
+    end
+  end
+
   private
 
   def generate_slug_and_sku
