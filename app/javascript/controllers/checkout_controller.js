@@ -67,7 +67,7 @@ export default class extends Controller {
 
     // Update Submit Button Text
     if (this.hasSubmitBtnTextTarget) {
-      this.submitBtnTextTarget.textContent = `Authorize M-Pesa Payment • ${this.formatCurrency(totalKes, "KES")}`
+      this.submitBtnTextTarget.textContent = `Complete Order • ${this.formatCurrency(totalKes, "KES")}`
     }
 
     if (this.hasModalAmountTarget) {
@@ -91,7 +91,7 @@ export default class extends Controller {
     let phone = this.phoneInputTarget.value.trim().replace(/\D/g, "")
 
     if (phone.length === 0) {
-      this.phoneStatusTarget.innerHTML = `<span class="text-neutral-400">Enter a Safaricom phone number (e.g. 0707 172 370)</span>`
+      this.phoneStatusTarget.innerHTML = `<span class="text-neutral-400">e.g. 0707 172 370</span>`
       return
     }
 
@@ -111,9 +111,8 @@ export default class extends Controller {
 
     if (isValid) {
       this.phoneStatusTarget.innerHTML = `
-        <span class="inline-flex items-center text-emerald-600 font-semibold">
-          <svg class="w-3.5 h-3.5 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-          Safaricom M-Pesa Ready (+${normalized})
+        <span class="text-emerald-600 font-semibold text-xs">
+          +${normalized}
         </span>
       `
       if (this.hasModalPhoneTarget) {
@@ -121,7 +120,7 @@ export default class extends Controller {
       }
     } else {
       this.phoneStatusTarget.innerHTML = `
-        <span class="text-amber-600 font-medium">Please enter a valid Kenyan mobile number (10 digits)</span>
+        <span class="text-amber-600 font-medium text-xs">Enter valid 10-digit number</span>
       `
     }
   }
@@ -130,7 +129,7 @@ export default class extends Controller {
     if (this.hasPhoneInputTarget) {
       const phone = this.phoneInputTarget.value.trim().replace(/\D/g, "")
       if (phone.length < 9) {
-        alert("Please provide a valid Safaricom phone number for the M-Pesa STK Push.")
+        alert("Please provide a valid phone number.")
         event.preventDefault()
         return
       }
