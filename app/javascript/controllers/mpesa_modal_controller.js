@@ -15,7 +15,7 @@ export default class extends Controller {
   openModal(event) {
     const phone = this.phoneInputTarget.value.trim()
     if (!phone) {
-      alert("Please enter a valid Safaricom phone number (e.g. 0707172370 or 254707172370)")
+      alert("Please enter a valid phone number (e.g. 0707172370 or 254707172370)")
       event.preventDefault()
       return
     }
