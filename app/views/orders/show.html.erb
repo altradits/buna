@@ -33,14 +33,19 @@
         <h3 class="font-serif text-lg font-bold text-[#140B07] border-b border-[#EFE7DA] pb-3">Items in Consignment</h3>
         <div class="divide-y divide-[#EFE7DA] text-xs">
           <% @order.order_items.each do |item| %>
-            <div class="py-3 flex justify-between items-start">
-              <div>
-                <div class="font-bold text-[#140B07]"><%= item.product.name %></div>
-                <div class="text-[11px] text-neutral-500">
-                  Format: <%= item.selected_format.presence || "Standard" %> • Qty: <%= item.quantity %>
+            <div class="py-3 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-lg overflow-hidden bg-[#FAF6EE] border border-[#EFE7DA] shrink-0">
+                  <img src="<%= item.product.display_image_url %>" alt="<%= item.product.name %>" class="w-full h-full object-cover">
+                </div>
+                <div class="min-w-0">
+                  <div class="font-bold text-[#140B07] truncate"><%= item.product.name %></div>
+                  <div class="text-[11px] text-neutral-500">
+                    Format: <%= item.selected_format.presence || "Standard" %> • Qty: <%= item.quantity %>
+                  </div>
                 </div>
               </div>
-              <div class="font-bold text-[#9E472A]">
+              <div class="font-bold text-[#9E472A] whitespace-nowrap">
                 <%= CurrencyHelper.format_money(item.total_price_kes, "KES") %>
               </div>
             </div>
