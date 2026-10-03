@@ -68,7 +68,7 @@ export default class extends Controller {
       if (attempts >= maxAttempts) {
         this.stopPolling()
         this.spinnerTarget.classList.add("hidden")
-        this.errorMessageTarget.textContent = "Request timed out. If you received an M-Pesa SMS, your order will update shortly."
+        this.errorMessageTarget.textContent = "Request timed out. If you received a confirmation SMS, your order will update shortly."
         this.errorStateTarget.classList.remove("hidden")
       }
     }, 2000)
