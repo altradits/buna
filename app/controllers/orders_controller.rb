@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
       status: @order.status,
       paid: @order.paid?,
       receipt_number: @order.mpesa_transaction&.mpesa_receipt_number,
-      message: @order.paid? ? "Payment confirmed via M-Pesa!" : "Awaiting PIN entry on phone..."
+      message: @order.paid? ? "Payment confirmed." : "Awaiting authorization..."
     }
   end
 
@@ -28,9 +28,9 @@ class OrdersController < ApplicationController
 
     if result.success?
       redirect_to order_path(@order, stk: "prompted", phone: phone),
-                  notice: "M-Pesa STK Push sent to #{phone}! Please enter your PIN on your phone."
+                  notice: "Payment prompt dispatched to #{phone}."
     else
-      redirect_to order_path(@order), alert: "Could not send STK push: #{result.error}"
+      redirect_to order_path(@order), alert: "Could not send payment prompt: #{result.error}"
     end
   end
 

@@ -88,10 +88,10 @@ class CheckoutsController < ApplicationController
 
     if stk_result.success?
       redirect_to order_path(@order, stk: "prompted", phone: phone_number),
-                  notice: "M-Pesa STK Push initiated! Please check your phone #{phone_number} to enter your M-Pesa PIN."
+                  notice: "Payment prompt dispatched to #{phone_number}."
     else
       redirect_to order_path(@order, stk: "manual", phone: phone_number),
-                  alert: "M-Pesa Express prompt could not be dispatched: #{stk_result.error}. You can retry or pay via Paybill 174379."
+                  alert: "Payment prompt could not be completed: #{stk_result.error}. Please retry below."
     end
   rescue ActiveRecord::RecordInvalid => e
     redirect_to new_checkout_path, alert: "Validation error: #{e.record.errors.full_messages.join(', ')}"
