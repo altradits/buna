@@ -73,6 +73,13 @@
               <% end %>
             </div>
 
+            <!-- Image Thumbnail -->
+            <div class="w-full h-48 overflow-hidden bg-[#FAF6EE] border-b border-[#EFE7DA] relative">
+              <%= link_to product_path(product), class: "block w-full h-full" do %>
+                <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" loading="lazy">
+              <% end %>
+            </div>
+
             <!-- Content -->
             <div class="p-4 space-y-2">
               <div>
