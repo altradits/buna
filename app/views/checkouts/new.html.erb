@@ -12,7 +12,7 @@
         <h1 class="font-serif text-2xl sm:text-3xl font-bold text-[#140B07]">Checkout</h1>
       </div>
       <div>
-        <%= link_to "← Back to Basket", cart_path, class: "inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-[#EFE7DA] text-[#24130D] hover:bg-[#FAF6EE] transition-colors" %>
+        <%= link_to "Back to Basket", cart_path, class: "inline-flex items-center text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-[#EFE7DA] text-[#24130D] hover:bg-[#FAF6EE] transition-colors" %>
       </div>
     </div>
 
@@ -143,8 +143,11 @@
           <!-- Items List -->
           <div class="divide-y divide-[#FAF6EE] max-h-56 overflow-y-auto space-y-1">
             <% @cart_items.each do |item| %>
-              <div class="py-2 flex justify-between items-start text-xs">
-                <div class="flex-1 pr-2 truncate">
+              <div class="py-2.5 flex items-center justify-between gap-3 text-xs">
+                <div class="w-10 h-10 rounded-lg overflow-hidden bg-[#FAF6EE] border border-[#EFE7DA] shrink-0">
+                  <img src="<%= item[:product].display_image_url %>" alt="<%= item[:product].name %>" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
                   <span class="font-medium text-[#140B07] block truncate"><%= item[:product].name %></span>
                   <span class="text-[10px] text-neutral-400">Qty: <%= item[:quantity] %><% if item[:format].present? %> • <%= item[:format] %><% end %></span>
                 </div>
