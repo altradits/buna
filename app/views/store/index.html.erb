@@ -92,7 +92,7 @@
       <div>
         <h2 class="font-serif text-xl font-bold text-[#140B07]">Explore by Origin Zone</h2>
       </div>
-      <%= link_to "View All →", products_path(category: "coffee-varieties"), class: "text-xs font-bold text-[#D48B38] hover:text-[#9E472A]" %>
+      <%= link_to "View All", products_path(category: "coffee-varieties"), class: "text-xs font-bold text-[#D48B38] hover:text-[#9E472A]" %>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -116,7 +116,7 @@
         <span class="text-xs font-bold text-[#9E472A] uppercase tracking-widest">Curated Offerings</span>
         <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#140B07]">Featured Coffee & Artifacts</h2>
       </div>
-      <%= link_to "View Catalog →", products_path, class: "text-xs font-bold text-[#D48B38] hover:text-[#9E472A]" %>
+      <%= link_to "View Catalog", products_path, class: "text-xs font-bold text-[#D48B38] hover:text-[#9E472A]" %>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -131,6 +131,13 @@
                 <span class="px-1.5 py-0.5 rounded bg-[#24130D] text-[#E5A652] font-semibold">
                   <%= product.roast_profile %>
                 </span>
+              <% end %>
+            </div>
+
+            <!-- Image Thumbnail -->
+            <div class="w-full h-48 overflow-hidden bg-[#FAF6EE] border-b border-[#EFE7DA] relative">
+              <%= link_to product_path(product), class: "block w-full h-full" do %>
+                <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" loading="lazy">
               <% end %>
             </div>
 
