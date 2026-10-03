@@ -3,92 +3,43 @@
 <% progress_pct = [ (current_total / free_shipping_threshold * 100).round, 100 ].min %>
 
 <% if current_cart.empty? %>
-  <!-- Empty State with Quick-Add Bestsellers -->
-  <div class="flex-1 flex flex-col justify-between p-6 overflow-y-auto">
-    <div class="text-center py-6 space-y-3">
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-[#EFE7DA] flex items-center justify-center text-3xl shadow-inner">
-        ☕
-      </div>
-      <h4 class="font-serif text-xl font-bold text-[#140B07]">Your Buna Basket is Empty</h4>
-      <p class="text-xs text-neutral-600 max-w-xs mx-auto leading-relaxed">
-        Start your authentic ceremony with freshly roasted heirloom beans or handcrafted clay brewing artifacts.
+  <!-- Clean Minimal Empty State -->
+  <div class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
+    <div class="w-14 h-14 rounded-2xl bg-[#EFE7DA] flex items-center justify-center text-2xl shadow-inner">
+      ☕
+    </div>
+    <div class="space-y-1">
+      <h4 class="font-serif text-lg font-bold text-[#140B07]">Your Basket is Empty</h4>
+      <p class="text-xs text-neutral-500 max-w-xs">
+        Discover freshly roasted Ethiopian heirloom coffees and authentic ceremony hardware.
       </p>
     </div>
-
-    <!-- Quick-Add Bestsellers Section -->
-    <div class="space-y-3 pt-2">
-      <div class="flex items-center justify-between text-xs">
-        <span class="font-bold text-[#9E472A] uppercase tracking-wider text-[10px]">Popular Ceremony Essentials</span>
-        <span class="text-[10px] text-neutral-400">1-Click Add</span>
-      </div>
-
-      <div class="space-y-2.5">
-        <% [
-             { name: "Yirgacheffe Kochere", amharic: "ይርጋጨፌ", zone: "Yirgacheffe", price_kes: 1850, price_etb: 1628, icon: "☕", format: "Roasted Whole Beans" },
-             { name: "Authentic Clay Jebena", amharic: "ጀበና", zone: "Gondar", price_kes: 3800, price_etb: 3344, icon: "🏺", format: "Clay Ware" },
-             { name: "Tigray Frankincense (Etan)", amharic: "ዕጣን", zone: "Tigray", price_kes: 950, price_etb: 836, icon: "🌿", format: "Ceremony Resin" }
-           ].each do |item| %>
-          <% product = Product.find_by("name ILIKE ?", "%#{item[:name]}%") || Product.first %>
-          <% if product %>
-            <div class="p-3 rounded-2xl bg-white border border-[#EFE7DA] flex items-center justify-between shadow-xs hover:border-[#D48B38] transition-all">
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-[#FAF6EE] flex items-center justify-center text-lg flex-shrink-0">
-                  <%= item[:icon] %>
-                </div>
-                <div>
-                  <h5 class="text-xs font-serif font-bold text-[#140B07]"><%= product.name %></h5>
-                  <div class="text-[10px] text-neutral-500 flex items-center space-x-1.5">
-                    <span class="text-[#D48B38] font-amharic font-semibold"><%= product.amharic_name %></span>
-                    <span>•</span>
-                    <span class="font-bold text-[#9E472A]"><%= product.formatted_price(current_currency) %></span>
-                  </div>
-                </div>
-              </div>
-
-              <%= button_to cart_add_path(product_id: product.id, quantity: 1, format_selected: item[:format]), method: :post, class: "px-3 py-1.5 rounded-lg bg-[#24130D] hover:bg-[#00A859] text-[#E5A652] hover:text-white text-xs font-bold transition-all shadow-xs cursor-pointer whitespace-nowrap" do %>
-                + Add
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
-
-    <!-- Navigation CTA -->
-    <div class="pt-6">
-      <%= link_to "Explore Entire Catalog →", products_path, data: { action: "click->cart#close" }, class: "w-full py-3.5 px-4 rounded-xl bg-white border border-[#EFE7DA] text-[#24130D] hover:bg-[#FAF6EE] text-xs font-bold text-center block shadow-xs transition-all" %>
+    <div class="pt-2">
+      <%= link_to "Explore Catalog →", products_path, data: { action: "click->cart#close" }, class: "py-2.5 px-6 rounded-xl bg-[#24130D] text-[#E5A652] hover:bg-[#140B07] text-xs font-bold inline-block shadow-xs transition-all" %>
     </div>
   </div>
 
 <% else %>
 
-  <!-- Corridor Progress Bar -->
-  <div class="px-6 pt-4 pb-2 bg-[#FAF6EE]">
-    <div class="p-3 rounded-2xl bg-gradient-to-r from-[#24130D] to-[#3A2016] text-[#FAF6EE] text-xs space-y-2 shadow-sm border border-[#9E472A]/30">
-      <div class="flex items-center justify-between text-[11px]">
-        <span class="font-medium text-[#E5A652] flex items-center">
-          <span class="w-2 h-2 rounded-full bg-[#00A859] mr-1.5 animate-pulse"></span>
-          Addis Ababa ➔ Moyale OSBP ➔ Nairobi Corridor
-        </span>
-        <span class="text-neutral-400 font-mono"><%= progress_pct %>%</span>
-      </div>
-
-      <div class="w-full bg-[#140B07] h-1.5 rounded-full overflow-hidden">
-        <div class="bg-gradient-to-r from-[#D48B38] to-[#00A859] h-full rounded-full transition-all duration-500" style="width: <%= progress_pct %>%"></div>
-      </div>
-
-      <div class="text-[10px] text-neutral-300">
+  <!-- Subtle Minimal Delivery Progress Bar -->
+  <div class="px-5 py-2.5 bg-white border-b border-[#EFE7DA]">
+    <div class="flex items-center justify-between text-[11px] mb-1.5">
+      <span class="text-neutral-600">
         <% if current_total >= free_shipping_threshold %>
-          <span class="text-[#00A859] font-bold">✓ Unlocked FREE Nairobi Doorstep Delivery!</span>
+          <span class="text-[#00A859] font-bold">✓ FREE Doorstep Delivery Unlocked!</span>
         <% else %>
-          <span>Add <strong><%= format_currency(free_shipping_threshold - current_total, current_currency) %></strong> more for <strong>FREE Doorstep Delivery</strong></span>
+          Add <strong class="text-[#9E472A]"><%= format_currency(free_shipping_threshold - current_total, current_currency) %></strong> for free delivery
         <% end %>
-      </div>
+      </span>
+      <span class="font-mono text-neutral-400 text-[10px]"><%= progress_pct %>%</span>
+    </div>
+    <div class="w-full bg-[#EFE7DA] h-1.5 rounded-full overflow-hidden">
+      <div class="bg-gradient-to-r from-[#D48B38] to-[#00A859] h-full rounded-full transition-all duration-300" style="width: <%= progress_pct %>%"></div>
     </div>
   </div>
 
   <!-- Cart Line Items -->
-  <div class="flex-1 overflow-y-auto px-6 py-3 space-y-3">
+  <div class="flex-1 overflow-y-auto px-5 py-3 space-y-2.5">
     <% current_cart.each do |product_id, item| %>
       <% product = Product.find_by(id: product_id) %>
       <% next unless product %>
@@ -97,45 +48,38 @@
       <% line_total_etb = product.price_etb * qty %>
       <% line_total = current_currency == "ETB" ? line_total_etb : line_total_kes %>
 
-      <div class="p-4 rounded-2xl bg-white border border-[#EFE7DA] shadow-sm space-y-3">
-        <div class="flex items-start justify-between gap-3">
-          <div class="flex-1">
-            <span class="text-[10px] text-[#9E472A] font-bold uppercase tracking-wider block">
-              <%= product.origin_zone.presence || product.category.name %>
-            </span>
-            <h5 class="text-sm font-serif font-bold text-[#140B07] hover:text-[#9E472A] leading-snug">
+      <div class="p-3.5 rounded-xl bg-white border border-[#EFE7DA] shadow-xs space-y-2.5">
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex-1 min-w-0">
+            <h5 class="text-xs font-serif font-bold text-[#140B07] hover:text-[#9E472A] truncate">
               <%= link_to product.name, product_path(product), data: { action: "click->cart#close" } %>
             </h5>
-            <div class="text-xs text-neutral-500 flex flex-wrap gap-1.5 mt-1">
-              <% if item["format"].present? %>
-                <span class="bg-[#FAF6EE] text-[#3A2016] px-2 py-0.5 rounded text-[10px] border border-[#EFE7DA] font-medium"><%= item["format"] %></span>
-              <% end %>
-              <% if item["roast"].present? %>
-                <span class="bg-[#24130D] text-[#E5A652] px-2 py-0.5 rounded text-[10px] font-semibold"><%= item["roast"] %></span>
-              <% end %>
-            </div>
+            <% if item["format"].present? || item["roast"].present? %>
+              <div class="text-[10px] text-neutral-500 mt-0.5 truncate">
+                <%= [item["format"], item["roast"]].compact.join(" • ") %>
+              </div>
+            <% end %>
           </div>
 
-          <%= button_to cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-1.5 text-neutral-400 hover:text-red-600 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer" do %>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <%= button_to cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-1 text-neutral-400 hover:text-red-600 rounded transition-colors cursor-pointer" do %>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
           <% end %>
         </div>
 
-        <div class="pt-2 border-t border-[#EFE7DA] flex items-center justify-between">
+        <div class="pt-1.5 border-t border-[#FAF6EE] flex items-center justify-between">
           <!-- Quantity Stepper Controls -->
-          <div class="flex items-center space-x-1.5 bg-[#FAF6EE] p-1 rounded-xl border border-[#EFE7DA]">
-            <%= button_to cart_update_path(product_id: product.id, quantity: qty - 1), method: :patch, class: "w-6 h-6 rounded-lg bg-white hover:bg-[#EFE7DA] text-[#24130D] font-bold text-xs flex items-center justify-center shadow-xs transition-colors cursor-pointer" do %>
+          <div class="flex items-center space-x-1 bg-[#FAF6EE] p-0.5 rounded-lg border border-[#EFE7DA]">
+            <%= button_to cart_update_path(product_id: product.id, quantity: qty - 1), method: :patch, class: "w-5 h-5 rounded bg-white hover:bg-[#EFE7DA] text-[#24130D] font-bold text-xs flex items-center justify-center transition-colors cursor-pointer" do %>
               −
             <% end %>
-            <span class="px-2 text-xs font-bold text-[#140B07] min-w-[20px] text-center"><%= qty %></span>
-            <%= button_to cart_update_path(product_id: product.id, quantity: qty + 1), method: :patch, class: "w-6 h-6 rounded-lg bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] font-bold text-xs flex items-center justify-center shadow-xs transition-colors cursor-pointer" do %>
+            <span class="px-1.5 text-xs font-bold text-[#140B07] min-w-[16px] text-center"><%= qty %></span>
+            <%= button_to cart_update_path(product_id: product.id, quantity: qty + 1), method: :patch, class: "w-5 h-5 rounded bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] font-bold text-xs flex items-center justify-center transition-colors cursor-pointer" do %>
               +
             <% end %>
           </div>
 
           <div class="text-right">
-            <span class="text-[10px] text-neutral-400 block">Unit: <%= product.formatted_price(current_currency) %></span>
-            <span class="text-sm font-bold text-[#9E472A]">
+            <span class="text-xs font-bold text-[#9E472A]">
               <%= CurrencyHelper.format_money(line_total, current_currency) %>
             </span>
           </div>
@@ -144,72 +88,30 @@
     <% end %>
   </div>
 
-  <!-- Drawer Footer: Interactive Checkout Options -->
-  <div class="p-6 bg-white border-t border-[#EFE7DA] space-y-4 shadow-2xl">
+  <!-- Drawer Footer: Clean & Focused Action -->
+  <div class="p-5 bg-white border-t border-[#EFE7DA] space-y-3 shadow-xl">
     <div class="flex justify-between items-baseline">
       <div>
-        <span class="text-xs text-neutral-600 block">Consignment Subtotal</span>
-        <span class="text-[11px] text-[#00A859] font-medium">Customs cleared at Moyale OSBP</span>
+        <span class="text-xs font-semibold text-neutral-700">Subtotal</span>
+        <span class="text-[10px] text-neutral-400 block">Customs cleared at Moyale</span>
       </div>
       <div class="text-right">
-        <span class="font-serif font-bold text-2xl text-[#140B07]">
+        <span class="font-serif font-bold text-xl text-[#140B07]">
           <%= format_currency(cart_subtotal, current_currency) %>
         </span>
-        <% if current_currency == "ETB" %>
-          <div class="text-[10px] text-neutral-400">≈ KSh <%= CurrencyHelper.convert_etb_to_kes(cart_subtotal).round %></div>
-        <% else %>
-          <div class="text-[10px] text-neutral-400">≈ ETB <%= CurrencyHelper.convert_kes_to_etb(cart_subtotal).round %></div>
-        <% end %>
       </div>
     </div>
 
-    <!-- Quick Express M-Pesa 1-Click Form in Drawer -->
-    <details class="group bg-[#FAF6EE] p-3.5 rounded-2xl border border-[#EFE7DA] text-xs">
-      <summary class="font-bold text-[#140B07] cursor-pointer flex items-center justify-between list-none">
-        <div class="flex items-center space-x-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-[#00A859] animate-pulse"></span>
-          <span>⚡ Express 1-Click M-Pesa Prompt</span>
-        </div>
-        <span class="text-[11px] text-[#D48B38] group-open:rotate-180 transition-transform">▼</span>
-      </summary>
-
-      <div class="pt-3 mt-3 border-t border-[#EFE7DA] space-y-3">
-        <%= form_with url: checkout_path, method: :post, local: true do |f| %>
-          <div class="space-y-2">
-            <div>
-              <label class="block text-[11px] font-semibold text-neutral-700 mb-1">Safaricom Mobile Number</label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center text-xs font-bold text-neutral-500">🇰🇪</span>
-                <%= f.telephone_field :customer_phone, value: ENV.fetch("DEFAULT_MERCHANT_PHONE", "+254707172370"), placeholder: "0707 172 370", required: true, class: "w-full pl-8 text-xs p-2.5 rounded-xl border border-neutral-300 bg-white font-mono font-semibold focus:ring-2 focus:ring-[#00A859]" %>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-[11px] font-semibold text-neutral-700 mb-1">Destination County</label>
-              <%= f.select :delivery_county, options_for_select(Logistics::EastAfricanCourierService::KENYA_COUNTY_RATES.keys, "Nairobi"), {}, class: "w-full text-xs p-2 rounded-xl border border-neutral-300 bg-white focus:ring-2 focus:ring-[#00A859]" %>
-            </div>
-          </div>
-
-          <div class="pt-2">
-            <%= f.button type: :submit, class: "w-full py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs flex items-center justify-center space-x-2 shadow transition-all cursor-pointer" do %>
-              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6zm-2-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>
-              <span>Instant STK Push Checkout</span>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    </details>
-
-    <!-- Primary Action: Full Standard Checkout -->
-    <%= link_to new_checkout_path, data: { action: "click->cart#close" }, class: "w-full py-4 px-5 rounded-2xl bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] hover:text-white font-bold text-sm text-center flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transition-all cursor-pointer" do %>
-      <span>Proceed to Full Checkout</span>
+    <!-- Primary Action: Checkout -->
+    <%= link_to new_checkout_path, data: { action: "click->cart#close" }, class: "w-full py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs text-center flex items-center justify-center space-x-2 shadow-sm hover:shadow transition-all cursor-pointer" do %>
+      <span>Proceed to M-Pesa Checkout</span>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
     <% end %>
 
     <!-- Secondary Links -->
-    <div class="flex items-center justify-between text-xs pt-1">
-      <%= link_to "View Detailed Basket Page", cart_path, data: { action: "click->cart#close" }, class: "font-semibold text-[#D48B38] hover:text-[#9E472A] underline" %>
-      <%= button_to "Clear Basket", cart_clear_path, method: :delete, data: { turbo_confirm: "Are you sure you want to empty your basket?" }, class: "text-neutral-400 hover:text-red-600 transition-colors cursor-pointer" %>
+    <div class="flex items-center justify-between text-[11px] pt-1">
+      <%= link_to "View Basket Page", cart_path, data: { action: "click->cart#close" }, class: "text-[#D48B38] hover:text-[#9E472A] underline" %>
+      <%= button_to "Clear Basket", cart_clear_path, method: :delete, data: { turbo_confirm: "Empty your basket?" }, class: "text-neutral-400 hover:text-red-600 transition-colors cursor-pointer" %>
     </div>
   </div>
 
