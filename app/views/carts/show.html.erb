@@ -10,12 +10,10 @@
     </div>
 
     <% if @cart_items.empty? %>
-      <div class="bg-white p-12 rounded-3xl border border-[#EFE7DA] text-center space-y-4 shadow-sm">
-        <div class="w-16 h-16 mx-auto rounded-full bg-[#FAF6EE] flex items-center justify-center text-3xl">☕</div>
-        <h2 class="font-serif text-2xl font-bold text-[#140B07]">Your basket is currently empty</h2>
-        <p class="text-xs text-neutral-600 max-w-sm mx-auto">Discover fresh Ethiopian highland roasts, handcrafted clay Jebenas, and ceremony accessories.</p>
-        <div class="pt-4">
-          <%= link_to "Explore Coffee Varieties", products_path(category: "coffee-varieties"), class: "inline-flex px-6 py-3 rounded-xl bg-[#24130D] text-[#E5A652] font-semibold text-xs hover:bg-[#140B07]" %>
+      <div class="bg-white p-8 rounded-2xl border border-[#EFE7DA] text-center space-y-3 shadow-xs">
+        <h2 class="font-serif text-xl font-bold text-[#140B07]">Your basket is empty</h2>
+        <div class="pt-2">
+          <%= link_to "Explore Coffee Varieties", products_path(category: "coffee-varieties"), class: "inline-flex px-5 py-2.5 rounded-xl bg-[#24130D] text-[#E5A652] font-semibold text-xs hover:bg-[#140B07]" %>
         </div>
       </div>
     <% else %>
@@ -54,9 +52,7 @@
                       +
                     <% end %>
                   </div>
-                  <%= button_to cart_remove_path(product_id: item[:product].id), method: :delete, title: "Remove item", class: "p-1.5 text-neutral-400 hover:text-red-600 rounded transition-colors cursor-pointer" do %>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                  <% end %>
+                  <%= button_to "✕", cart_remove_path(product_id: item[:product].id), method: :delete, title: "Remove item", class: "p-1 text-neutral-400 hover:text-red-600 rounded text-xs transition-colors cursor-pointer" %>
                 </div>
               </div>
             </div>
@@ -64,7 +60,7 @@
 
           <div class="pt-4 flex justify-between items-center text-xs">
             <%= button_to "Clear Basket", cart_clear_path, method: :delete, class: "text-neutral-400 hover:text-red-600 underline" %>
-            <%= link_to "← Continue Shopping", products_path, class: "font-semibold text-[#D48B38] hover:text-[#9E472A]" %>
+            <%= link_to "Continue Shopping", products_path, class: "font-semibold text-[#D48B38] hover:text-[#9E472A]" %>
           </div>
         </div>
 
@@ -83,9 +79,7 @@
           </div>
 
           <div class="pt-3 border-t border-[#EFE7DA]">
-            <%= link_to new_checkout_path, class: "w-full py-3.5 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs text-center block shadow hover:shadow-md transition-all" do %>
-              Proceed to M-Pesa Checkout →
-            <% end %>
+            <%= link_to "Proceed to Checkout", new_checkout_path, class: "w-full py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs text-center block shadow hover:shadow-md transition-all" %>
           </div>
         </div>
 
