@@ -42,20 +42,25 @@
       <% line_total_etb = product.price_etb * qty %>
       <% line_total = current_currency == "ETB" ? line_total_etb : line_total_kes %>
 
-      <div class="p-3.5 rounded-xl bg-white border border-[#EFE7DA] shadow-xs space-y-2.5">
-        <div class="flex items-start justify-between gap-2">
+      <div class="p-3 rounded-xl bg-white border border-[#EFE7DA] shadow-xs space-y-2.5">
+        <div class="flex items-start gap-3">
+          <div class="w-12 h-12 rounded-lg overflow-hidden bg-[#FAF6EE] border border-[#EFE7DA] shrink-0">
+            <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover">
+          </div>
+
           <div class="flex-1 min-w-0">
-            <h5 class="text-xs font-serif font-bold text-[#140B07] hover:text-[#9E472A] truncate">
-              <%= link_to product.name, product_path(product), data: { action: "click->cart#close" } %>
-            </h5>
+            <div class="flex items-start justify-between gap-1">
+              <h5 class="text-xs font-serif font-bold text-[#140B07] hover:text-[#9E472A] truncate">
+                <%= link_to product.name, product_path(product), data: { action: "click->cart#close" } %>
+              </h5>
+              <%= button_to "✕", cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-0.5 text-neutral-400 hover:text-red-600 rounded text-xs transition-colors cursor-pointer" %>
+            </div>
             <% if item["format"].present? || item["roast"].present? %>
               <div class="text-[10px] text-neutral-500 mt-0.5 truncate">
                 <%= [item["format"], item["roast"]].compact.join(" • ") %>
               </div>
             <% end %>
           </div>
-
-          <%= button_to "✕", cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-1 text-neutral-400 hover:text-red-600 rounded text-xs transition-colors cursor-pointer" %>
         </div>
 
         <div class="pt-1.5 border-t border-[#FAF6EE] flex items-center justify-between">
