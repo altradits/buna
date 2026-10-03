@@ -1,6 +1,9 @@
 # Yebente Buna (የበንቴ ቡና)
 **Authentic Ethiopian Coffee Ceremony & Cultural Artifacts Exported Direct to Kenya**
 
+🌐 **Live Demo / Production:** [https://buna-beta.vercel.app](https://buna-beta.vercel.app)
+
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)](https://buna-beta.vercel.app)
 [![Ruby on Rails](https://img.shields.io/badge/Ruby_on_Rails-7.1-CC0000.svg)](https://rubyonrails.org)
 [![Safaricom M-Pesa](https://img.shields.io/badge/Payment-Safaricom_M--Pesa_Daraja-00A859.svg)](https://developer.safaricom.co.ke)
 [![Timezone](https://img.shields.io/badge/Timezone-Africa%2FNairobi-D48B38.svg)]()
@@ -101,11 +104,18 @@ To deploy Yebente Buna on your own purchased domain and VPS hosting:
 1. **Buy Domain:** Register your domain (e.g. `yebente.africa` or `yebentebuna.co.ke`) on Truehost, Safaricom Domains, or Namecheap.
 2. **Buy VPS Hosting:** Provision an Ubuntu 22.04 / 24.04 server on DigitalOcean, AWS EC2, or Hetzner.
 3. **Point DNS:** Add DNS `A` records pointing `@` and `www` to your server's IP address.
-4. **Follow the Complete Guide:** Step-by-step instructions are documented in [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md):
-   * Setting up Ruby 3.2, PostgreSQL, and Nginx.
-   * Issuing free Let's Encrypt SSL certificates.
-   * Configuring Systemd services for automated restart.
-   * Going live on the Safaricom Daraja portal.
+1. **Deploy to Vercel (Container Images):**
+   * Live deployment: [https://buna-beta.vercel.app](https://buna-beta.vercel.app)
+   * The app is configured with `Dockerfile.vercel` for serverless container deployment.
+   * To deploy updates: `npx vercel --prod`
+   * To attach managed PostgreSQL: set `DATABASE_URL` in your Vercel project environment variables.
+
+2. **Deploy to VPS (Ubuntu/Nginx):**
+   * Step-by-step instructions are documented in [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md):
+     * Setting up Ruby 3.2, PostgreSQL, and Nginx.
+     * Issuing free Let's Encrypt SSL certificates.
+     * Configuring Systemd services for automated restart.
+     * Going live on the Safaricom Daraja portal.
 
 ---
 
