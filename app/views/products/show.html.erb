@@ -20,13 +20,11 @@
         <div class="w-40 h-40 sm:w-52 sm:h-52 rounded-xl bg-gradient-to-br from-[#FAF6EE] to-[#EFE7DA]/50 border border-[#EFE7DA] flex items-center justify-center p-4 shadow-inner">
           <% if @product.coffee? %>
             <div class="space-y-1.5">
-              <span class="text-3xl">☕</span>
               <div class="font-serif font-bold text-lg text-[#24130D]"><%= @product.origin_zone %></div>
               <div class="text-xs text-[#9E472A] font-amharic font-semibold"><%= @product.amharic_name %></div>
             </div>
           <% else %>
             <div class="space-y-1.5">
-              <span class="text-3xl">🏺</span>
               <div class="font-serif font-bold text-lg text-[#24130D]"><%= @product.name %></div>
               <div class="text-xs text-[#9E472A] font-amharic font-semibold"><%= @product.amharic_name %></div>
             </div>
@@ -54,7 +52,7 @@
             <span class="text-[10px] text-neutral-400 block uppercase font-medium">Price</span>
             <span class="font-serif text-2xl font-bold text-[#140B07]"><%= @product.formatted_price(current_currency) %></span>
           </div>
-          <span class="text-xs text-[#00A859] font-semibold">● In Stock</span>
+          <span class="text-xs text-[#00A859] font-semibold">In Stock</span>
         </div>
 
         <p class="text-xs sm:text-sm text-neutral-600 leading-relaxed">
@@ -118,9 +116,8 @@
           <div class="flex items-center gap-3 pt-1">
             <%= f.submit "Add to Basket", class: "flex-1 py-3 px-4 rounded-xl bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] font-bold text-xs shadow transition-all cursor-pointer text-center" %>
             
-            <button type="submit" name="buy_now" value="true" class="flex-1 py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs shadow transition-all text-center whitespace-nowrap cursor-pointer flex items-center justify-center space-x-1.5">
-              <span>Instant M-Pesa</span>
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <button type="submit" name="buy_now" value="true" class="flex-1 py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs shadow transition-all text-center whitespace-nowrap cursor-pointer">
+              Buy Now
             </button>
           </div>
         <% end %>
