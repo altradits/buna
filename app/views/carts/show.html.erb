@@ -23,14 +23,19 @@
         <div class="lg:col-span-8 bg-white p-5 sm:p-6 rounded-2xl border border-[#EFE7DA] shadow-xs divide-y divide-[#FAF6EE]">
           <% @cart_items.each do |item| %>
             <div class="py-3.5 first:pt-0 last:pb-0 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div class="flex-1">
-                <span class="text-[10px] text-[#9E472A] font-semibold uppercase"><%= item[:product].category.name %></span>
-                <h3 class="font-serif font-bold text-sm sm:text-base text-[#140B07]">
-                  <%= link_to item[:product].name, product_path(item[:product]), class: "hover:text-[#9E472A]" %>
-                </h3>
-                <div class="text-[11px] text-neutral-400 mt-0.5 flex flex-wrap gap-1.5">
-                  <% if item[:format].present? %><span class="bg-[#FAF6EE] px-1.5 py-0.5 rounded"><%= item[:format] %></span><% end %>
-                  <% if item[:roast].present? %><span class="bg-[#24130D] text-[#E5A652] px-1.5 py-0.5 rounded text-[10px]"><%= item[:roast] %></span><% end %>
+              <div class="flex items-center gap-3.5 flex-1 min-w-0">
+                <div class="w-14 h-14 rounded-lg overflow-hidden bg-[#FAF6EE] border border-[#EFE7DA] shrink-0">
+                  <img src="<%= item[:product].display_image_url %>" alt="<%= item[:product].name %>" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 min-w-0">
+                  <span class="text-[10px] text-[#9E472A] font-semibold uppercase"><%= item[:product].category.name %></span>
+                  <h3 class="font-serif font-bold text-sm sm:text-base text-[#140B07] truncate">
+                    <%= link_to item[:product].name, product_path(item[:product]), class: "hover:text-[#9E472A]" %>
+                  </h3>
+                  <div class="text-[11px] text-neutral-400 mt-0.5 flex flex-wrap gap-1.5">
+                    <% if item[:format].present? %><span class="bg-[#FAF6EE] px-1.5 py-0.5 rounded"><%= item[:format] %></span><% end %>
+                    <% if item[:roast].present? %><span class="bg-[#24130D] text-[#E5A652] px-1.5 py-0.5 rounded text-[10px]"><%= item[:roast] %></span><% end %>
+                  </div>
                 </div>
               </div>
 
