@@ -5,28 +5,22 @@
 <% if current_cart.empty? %>
   <!-- Clean Minimal Empty State -->
   <div class="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
-    <div class="w-14 h-14 rounded-2xl bg-[#EFE7DA] flex items-center justify-center text-2xl shadow-inner">
-      ☕
-    </div>
     <div class="space-y-1">
       <h4 class="font-serif text-lg font-bold text-[#140B07]">Your Basket is Empty</h4>
-      <p class="text-xs text-neutral-500 max-w-xs">
-        Discover freshly roasted Ethiopian heirloom coffees and authentic ceremony hardware.
-      </p>
     </div>
     <div class="pt-2">
-      <%= link_to "Explore Catalog →", products_path, data: { action: "click->cart#close" }, class: "py-2.5 px-6 rounded-xl bg-[#24130D] text-[#E5A652] hover:bg-[#140B07] text-xs font-bold inline-block shadow-xs transition-all" %>
+      <%= link_to "Explore Catalog", products_path, data: { action: "click->cart#close" }, class: "py-2 px-5 rounded-xl bg-[#24130D] text-[#E5A652] hover:bg-[#140B07] text-xs font-bold inline-block shadow-xs transition-all" %>
     </div>
   </div>
 
 <% else %>
 
-  <!-- Subtle Minimal Delivery Progress Bar -->
+  <!-- Delivery Progress Bar -->
   <div class="px-5 py-2.5 bg-white border-b border-[#EFE7DA]">
     <div class="flex items-center justify-between text-[11px] mb-1.5">
       <span class="text-neutral-600">
         <% if current_total >= free_shipping_threshold %>
-          <span class="text-[#00A859] font-bold">✓ FREE Doorstep Delivery Unlocked!</span>
+          <span class="text-[#00A859] font-bold">Free Delivery Unlocked</span>
         <% else %>
           Add <strong class="text-[#9E472A]"><%= format_currency(free_shipping_threshold - current_total, current_currency) %></strong> for free delivery
         <% end %>
@@ -34,7 +28,7 @@
       <span class="font-mono text-neutral-400 text-[10px]"><%= progress_pct %>%</span>
     </div>
     <div class="w-full bg-[#EFE7DA] h-1.5 rounded-full overflow-hidden">
-      <div class="bg-gradient-to-r from-[#D48B38] to-[#00A859] h-full rounded-full transition-all duration-300" style="width: <%= progress_pct %>%"></div>
+      <div class="bg-[#00A859] h-full rounded-full transition-all duration-300" style="width: <%= progress_pct %>%"></div>
     </div>
   </div>
 
@@ -61,9 +55,7 @@
             <% end %>
           </div>
 
-          <%= button_to cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-1 text-neutral-400 hover:text-red-600 rounded transition-colors cursor-pointer" do %>
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-          <% end %>
+          <%= button_to "✕", cart_remove_path(product_id: product.id), method: :delete, title: "Remove item", class: "p-1 text-neutral-400 hover:text-red-600 rounded text-xs transition-colors cursor-pointer" %>
         </div>
 
         <div class="pt-1.5 border-t border-[#FAF6EE] flex items-center justify-between">
@@ -88,25 +80,17 @@
     <% end %>
   </div>
 
-  <!-- Drawer Footer: Clean & Focused Action -->
+  <!-- Drawer Footer -->
   <div class="p-5 bg-white border-t border-[#EFE7DA] space-y-3 shadow-xl">
     <div class="flex justify-between items-baseline">
-      <div>
-        <span class="text-xs font-semibold text-neutral-700">Subtotal</span>
-        <span class="text-[10px] text-neutral-400 block">Customs cleared at Moyale</span>
-      </div>
-      <div class="text-right">
-        <span class="font-serif font-bold text-xl text-[#140B07]">
-          <%= format_currency(cart_subtotal, current_currency) %>
-        </span>
-      </div>
+      <span class="text-xs font-semibold text-neutral-700">Subtotal</span>
+      <span class="font-serif font-bold text-xl text-[#140B07]">
+        <%= format_currency(cart_subtotal, current_currency) %>
+      </span>
     </div>
 
     <!-- Primary Action: Checkout -->
-    <%= link_to new_checkout_path, data: { action: "click->cart#close" }, class: "w-full py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs text-center flex items-center justify-center space-x-2 shadow-sm hover:shadow transition-all cursor-pointer" do %>
-      <span>Proceed to M-Pesa Checkout</span>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-    <% end %>
+    <%= link_to "Checkout", new_checkout_path, data: { action: "click->cart#close" }, class: "w-full py-3 px-4 rounded-xl bg-[#00A859] hover:bg-[#008F4C] text-white font-bold text-xs text-center block shadow-sm hover:shadow transition-all cursor-pointer" %>
 
     <!-- Secondary Links -->
     <div class="flex items-center justify-between text-[11px] pt-1">
