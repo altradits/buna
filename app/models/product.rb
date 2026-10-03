@@ -56,53 +56,53 @@ class Product < ApplicationRecord
   def display_image_url
     return image_url if image_url.present?
 
-    s = slug.to_s.downcase
+    s = "#{slug} #{name}".downcase
     case s
-    when /raw-green-beans/
+    when /green-unroasted|raw-green|raw green|green beans/
       "/images/products/coffee-green-beans.jpg"
-    when /fine-ground|jebena-fine-ground|ground-format/
+    when /fine-ground|jebena-fine|ground-format|fine ground/
       "/images/products/coffee-ground.jpg"
-    when /heirloom|roasted-whole-beans|dark-roast|medium-roast|bensa|longberry|highland-forest|biosphere/
+    when /heirloom|roasted-whole|dark-roast|medium-roast|bensa|longberry|highland-forest|biosphere|whole beans|roasted/
       "/images/products/coffee-roasted-beans.jpg"
-    when /gondar-clay-jebena/
+    when /gondar.*jebena|gondar clay/
       "/images/products/jebena-gondar.jpg"
-    when /harari.*jebena/
+    when /harari.*jebena|harar.*jebena|flat-bottom/
       "/images/products/jebena-harari.jpg"
-    when /menkeshkesh/
+    when /menkeshkesh|roasting-pan|roasting pan/
       "/images/products/menkeshkesh-pan.jpg"
-    when /fernello/
+    when /fernello|brazier|charcoal/
       "/images/products/fernello-brazier.jpg"
-    when /kettle|brass-pouring/
+    when /kettle|brass-pouring|pouring kettle/
       "/images/products/jebena-gondar.jpg"
-    when /sini|cini/
+    when /sini|cini|cups|saucers/
       "/images/products/sini-cups-set.jpg"
-    when /rekebot/
+    when /rekebot|coffee table|porcelain.*tray/
       "/images/products/rekebot-table.jpg"
-    when /mashesha|stirring/
+    when /mashesha|stirring|stirrer/
       "/images/products/mashesha-stirrer.jpg"
-    when /conical-burr|electric-grinder/
+    when /conical-burr|electric-grinder|electric grinder/
       "/images/products/electric-grinder.jpg"
-    when /travel-grinder|brass-cylindrical/
+    when /travel-grinder|brass-cylindrical|cylindrical travel/
       "/images/products/brass-hand-grinder.jpg"
-    when /hand-mill|manual-buna-grinder/
+    when /hand-mill|manual-buna|hand mill/
       "/images/products/cast-iron-grinder.jpg"
-    when /frankincense|etan/
+    when /frankincense|etan|olibanum/
       "/images/products/frankincense-resin.jpg"
-    when /burner|gidich|mubakhar/
+    when /burner|gidich|mubakhar|incense burner/
       "/images/products/clay-incense-burner.jpg"
     when /myrrh|karbe/
       "/images/products/myrrh-resin.jpg"
     when /tenadam|rue/
       "/images/products/tenadam-herbs.jpg"
-    when /korerima|spice/
+    when /korerima|spice infusion/
       "/images/products/korerima-spice.jpg"
-    when /coals|olive-wood-shavings/
+    when /coals|olive-wood-shavings|coconut coals/
       "/images/products/olive-wood-coals.jpg"
-    when /ketema/
+    when /ketema|floor mat/
       "/images/products/ketema-floor-mat.jpg"
-    when /tibeb/
+    when /tibeb|table runner/
       "/images/products/tibeb-table-runner.jpg"
-    when /barchuma/
+    when /barchuma|wooden.*stool/
       "/images/products/wooden-barchuma-stool.jpg"
     when /cushion|pouf/
       "/images/products/velvet-floor-cushion.jpg"
