@@ -4,8 +4,8 @@ class ProductsController < ApplicationController
     @products = Product.active
 
     if params[:category].present?
-      @category = Category.find_by!(slug: params[:category])
-      @products = @products.where(category: @category)
+      @category = Category.find_by(slug: params[:category])
+      @products = @products.where(category: @category) if @category
     end
 
     if params[:zone].present?

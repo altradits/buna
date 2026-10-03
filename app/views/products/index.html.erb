@@ -1,122 +1,85 @@
-<div class="py-12 bg-[#FAF6EE]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-    
-    <!-- Title & Search -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE7DA] pb-4">
-      <div>
-        <h1 class="font-serif text-2xl sm:text-3xl font-bold text-[#140B07]">
-          <%= @category ? @category.name : "All Buna Offerings" %>
-          <% if @category %><span class="text-sm font-amharic text-[#D48B38] ml-1 font-normal">(<%= @category.amharic_name %>)</span><% end %>
-        </h1>
-        <p class="text-xs text-neutral-500 mt-0.5">Authentic Ethiopian coffees and handcrafted ceremony ware.</p>
-      </div>
+<!-- PRODUCT LISTINGS: Immediate Showcase Directly Below Navbar -->
+<div class="py-5 sm:py-7 bg-[#FAF6EE]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <!-- Search Form -->
-      <%= form_with url: products_path, method: :get, local: true, class: "flex items-center space-x-1.5" do |f| %>
-        <%= f.text_field :q, value: params[:q], placeholder: "Search coffee, Jebena...", class: "px-3 py-1.5 text-xs rounded-xl border border-[#EFE7DA] bg-white focus:outline-none focus:ring-2 focus:ring-[#D48B38] w-48 sm:w-56" %>
-        <%= f.submit "Search", class: "px-3 py-1.5 bg-[#24130D] text-[#E5A652] rounded-xl text-xs font-semibold hover:bg-[#140B07] transition-all cursor-pointer" %>
-      <% end %>
-    </div>
-
-    <!-- Category Tabs: Compact & Horizontal Scrollable -->
-    <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
-      <%= link_to "All", products_path, class: "px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all #{params[:category].blank? ? 'bg-[#24130D] text-[#E5A652]' : 'bg-white text-neutral-600 hover:bg-[#EFE7DA]'}" %>
-      <% @categories.each do |cat| %>
-        <%= link_to cat.name, products_path(category: cat.slug), class: "px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all #{params[:category] == cat.slug ? 'bg-[#24130D] text-[#E5A652]' : 'bg-white text-neutral-600 hover:bg-[#EFE7DA]'}" %>
-      <% end %>
-    </div>
-
-    <!-- Secondary Filters (Origin & Roast) -->
-    <div class="bg-white p-3 rounded-xl border border-[#EFE7DA] flex flex-wrap items-center justify-between gap-3 text-xs">
-      <div class="flex items-center space-x-1.5 flex-wrap gap-1">
-        <span class="text-neutral-400 font-medium text-[11px]">Zone:</span>
-        <% %w[Sidamo Yirgacheffe Harrar Limu Kaffa].each do |zone| %>
-          <%= link_to zone, products_path(category: params[:category], roast: params[:roast], q: params[:q], zone: (params[:zone] == zone ? nil : zone)), class: "px-2 py-0.5 rounded-md text-[11px] font-medium #{params[:zone] == zone ? 'bg-[#D48B38] text-white' : 'bg-[#FAF6EE] text-[#3A2016] hover:bg-[#EFE7DA]'}" %>
-        <% end %>
-      </div>
-
-      <div class="flex items-center space-x-1.5 flex-wrap gap-1">
-        <span class="text-neutral-400 font-medium text-[11px]">Roast:</span>
-        <% ["Light", "Medium", "Traditional Dark Roast"].each do |roast| %>
-          <%= link_to roast, products_path(category: params[:category], zone: params[:zone], q: params[:q], roast: (params[:roast] == roast ? nil : roast)), class: "px-2 py-0.5 rounded-md text-[11px] font-medium #{params[:roast] == roast ? 'bg-[#24130D] text-[#E5A652]' : 'bg-[#FAF6EE] text-[#3A2016] hover:bg-[#EFE7DA]'}" %>
-        <% end %>
-      </div>
-
-      <% if params[:category].present? || params[:zone].present? || params[:roast].present? || params[:q].present? %>
-        <%= link_to "Clear", products_path, class: "px-2 py-0.5 rounded-md text-[11px] font-semibold text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors" %>
-      <% end %>
-    </div>
-
-    <!-- Product Grid: Minimal, Clean & Balanced -->
-    <% if @products.empty? %>
-      <div class="p-8 rounded-2xl bg-white border border-[#EFE7DA] text-center space-y-3">
-        <h3 class="font-serif text-lg font-bold text-[#140B07]">No Products Found</h3>
-        <p class="text-xs text-neutral-500 max-w-sm mx-auto">No offerings matching your selected filters.</p>
+    <% if @category.present? || params[:q].present? %>
+      <div class="mb-5 flex items-center justify-between text-xs text-neutral-600 bg-white px-4 py-2.5 rounded-xl border border-[#EFE7DA]">
         <div>
-          <%= link_to "Reset Filters", products_path, class: "px-4 py-2 rounded-xl bg-[#24130D] text-[#E5A652] text-xs font-semibold inline-block hover:bg-[#140B07]" %>
+          Showing:
+          <% if @category.present? %>
+            <strong class="text-[#140B07]"><%= @category.name %></strong>
+            <span class="text-[#D48B38] font-amharic ml-1">(<%= @category.amharic_name %>)</span>
+          <% end %>
+          <% if params[:q].present? %>
+            matching <span class="italic text-[#140B07]">"<%= params[:q] %>"</span>
+          <% end %>
+          <span class="text-neutral-400 ml-1.5">• <%= @products.count %> items</span>
+        </div>
+        <%= link_to "✕ Show All", root_path, class: "text-xs font-semibold text-[#9E472A] hover:underline" %>
+      </div>
+    <% end %>
+
+    <!-- Product Grid: Immediate Visual Showcase -->
+    <% if @products.empty? %>
+      <div class="py-12 bg-white rounded-xl border border-[#EFE7DA] text-center space-y-3">
+        <h3 class="font-serif text-lg font-bold text-[#140B07]">No Products Found</h3>
+        <p class="text-xs text-neutral-500">No offerings match your current selection.</p>
+        <div>
+          <%= link_to "View All Products", root_path, class: "px-4 py-2 rounded-lg bg-[#24130D] text-[#E5A652] text-xs font-semibold inline-block hover:bg-[#140B07]" %>
         </div>
       </div>
     <% else %>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-      <% @products.each do |product| %>
-        <div class="bg-white rounded-xl border border-[#EFE7DA] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-          <div>
-            <!-- Card Header -->
-            <div class="p-3.5 bg-[#FAF6EE]/60 border-b border-[#EFE7DA] flex items-center justify-between text-[10px]">
-              <span class="font-semibold text-[#9E472A]">
-                <%= product.category.name %>
-              </span>
-              <% if product.roast_profile.present? %>
-                <span class="px-1.5 py-0.5 rounded bg-[#24130D] text-[#E5A652] font-semibold">
-                  <%= product.roast_profile %>
-                </span>
-              <% end %>
-            </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+        <% @products.each do |product| %>
+          <div class="bg-white rounded-xl border border-[#EFE7DA] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+            
+            <div>
+              <!-- Product Image Thumbnail (Single Specific Image Only) -->
+              <div class="w-full h-52 sm:h-56 overflow-hidden bg-[#FAF6EE] border-b border-[#EFE7DA] relative">
+                <%= link_to product_path(product), class: "block w-full h-full" do %>
+                  <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                <% end %>
+              </div>
 
-            <!-- Image Thumbnail -->
-            <div class="w-full h-48 overflow-hidden bg-[#FAF6EE] border-b border-[#EFE7DA] relative">
-              <%= link_to product_path(product), class: "block w-full h-full" do %>
-                <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" loading="lazy">
-              <% end %>
-            </div>
-
-            <!-- Content -->
-            <div class="p-4 space-y-2">
-              <div>
-                <span class="text-[10px] text-[#D48B38] font-amharic font-semibold"><%= product.amharic_name %></span>
+              <!-- Details Section: Clean & Non-Repetitive -->
+              <div class="p-3.5 space-y-1.5">
+                <div class="text-[11px] text-[#D48B38] font-amharic font-semibold"><%= product.amharic_name %></div>
                 <h3 class="font-serif text-sm font-bold text-[#140B07] group-hover:text-[#9E472A] transition-colors leading-snug">
                   <%= link_to product.name, product_path(product) %>
                 </h3>
-                <p class="text-xs text-neutral-500 mt-1 line-clamp-2 leading-relaxed">
-                  <%= product.short_description.presence || product.description %>
-                </p>
-              </div>
 
-              <% if product.coffee? && product.tasting_notes.present? %>
-                <div class="text-[10px] text-[#9E472A] bg-[#FAF6EE] px-2 py-1 rounded-lg">
-                  <%= product.tasting_notes %>
-                </div>
+                <% if product.coffee? && product.tasting_notes.present? %>
+                  <p class="text-[11px] text-[#9E472A] font-medium leading-relaxed">
+                    <%= product.tasting_notes %>
+                  </p>
+                <% else %>
+                  <p class="text-xs text-neutral-500 line-clamp-2 leading-relaxed">
+                    <%= product.short_description.presence || product.description %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- Price & Direct Cart Actions -->
+            <div class="p-3 border-t border-[#EFE7DA] bg-[#FAF6EE]/30 flex items-center justify-between gap-2">
+              <span class="font-bold text-sm text-[#140B07]">
+                <%= product.formatted_price(current_currency) %>
+              </span>
+
+              <%= form_with url: cart_add_path, method: :post, local: false, class: "flex items-center space-x-1" do |f| %>
+                <%= f.hidden_field :product_id, value: product.id %>
+                <%= f.hidden_field :quantity, value: 1 %>
+                <%= f.hidden_field :format_selected, value: (product.coffee? ? "Roasted Whole Beans" : "Standard") %>
+                <%= f.submit "Add", class: "py-1 px-2.5 rounded-lg bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] text-xs font-semibold cursor-pointer shadow-xs transition-colors" %>
+                <button type="submit" name="buy_now" value="true" class="py-1 px-2.5 rounded-lg bg-[#00A859] hover:bg-[#008F4C] text-white text-xs font-semibold cursor-pointer shadow-xs transition-colors">
+                  Buy Now
+                </button>
               <% end %>
             </div>
-          </div>
 
-          <!-- Footer Price & Actions -->
-          <div class="p-3 border-t border-[#EFE7DA] bg-[#FAF6EE]/20 flex items-center justify-between gap-2">
-            <span class="font-bold text-sm text-[#140B07]"><%= product.formatted_price(current_currency) %></span>
-
-            <%= form_with url: cart_add_path, method: :post, local: false, class: "flex items-center space-x-1" do |f| %>
-              <%= f.hidden_field :product_id, value: product.id %>
-              <%= f.hidden_field :quantity, value: 1 %>
-              <%= f.hidden_field :format_selected, value: (product.coffee? ? "Roasted Whole Beans" : "Standard") %>
-              <%= f.submit "Add", class: "py-1 px-2.5 rounded-lg bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] text-xs font-semibold cursor-pointer shadow-xs" %>
-              <button type="submit" name="buy_now" value="true" class="py-1 px-2.5 rounded-lg bg-[#00A859] hover:bg-[#008F4C] text-white text-xs font-semibold cursor-pointer shadow-xs">
-                Buy Now
-              </button>
-            <% end %>
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
     <% end %>
 
   </div>

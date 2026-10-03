@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
+ActiveRecord::Schema[7.1].define(version: 2026_10_03_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.string "result_desc"
     t.datetime "transaction_date"
     t.string "status", default: "initiated", null: false
-    t.jsonb "raw_callback_payload"
+    t.json "raw_callback_payload"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["checkout_request_id", "merchant_request_id"], name: "idx_on_checkout_request_id_merchant_request_id_71936513ba"
@@ -153,13 +153,24 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.datetime "dispatched_at"
     t.datetime "estimated_delivery_at"
     t.datetime "delivered_at"
-    t.jsonb "tracking_events"
+    t.json "tracking_events"
     t.text "consignment_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_shipping_shipments_on_order_id"
     t.index ["status"], name: "index_shipping_shipments_on_status"
     t.index ["tracking_number"], name: "index_shipping_shipments_on_tracking_number", unique: true
+  end
+
+  create_table "solid_queue_blocked_executions", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "queue_name", null: false
+    t.integer "priority", default: 0, null: false
+    t.string "concurrency_key", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.index ["expires_at", "concurrency_key"], name: "index_solid_queue_blocked_executions_for_maintenance"
+    t.index ["job_id"], name: "index_solid_queue_blocked_executions_on_job_id", unique: true
   end
 
   create_table "solid_queue_claimed_executions", force: :cascade do |t|
@@ -195,6 +206,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.index ["scheduled_at", "finished_at"], name: "index_solid_queue_jobs_on_scheduled_at_and_finished_at"
   end
 
+  create_table "solid_queue_pauses", force: :cascade do |t|
+    t.string "queue_name", null: false
+    t.datetime "created_at", null: false
+    t.index ["queue_name"], name: "index_solid_queue_pauses_on_queue_name", unique: true
+  end
+
   create_table "solid_queue_processes", force: :cascade do |t|
     t.string "kind", null: false
     t.datetime "last_heartbeat_at", null: false
@@ -215,6 +232,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
     t.index ["job_id"], name: "index_solid_queue_ready_executions_on_job_id", unique: true
     t.index ["priority", "job_id"], name: "index_solid_queue_poll_all"
     t.index ["queue_name", "priority", "job_id"], name: "index_solid_queue_poll_by_queue"
+  end
+
+  create_table "solid_queue_recurring_executions", force: :cascade do |t|
+    t.bigint "job_id", null: false
+    t.string "task_key", null: false
+    t.datetime "run_at", null: false
+    t.datetime "created_at", null: false
+    t.index ["job_id"], name: "index_solid_queue_recurring_executions_on_job_id", unique: true
+    t.index ["task_key", "run_at"], name: "index_solid_queue_recurring_executions_on_task_key_and_run_at", unique: true
   end
 
   create_table "solid_queue_scheduled_executions", force: :cascade do |t|
@@ -266,8 +292,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_02_000008) do
   add_foreign_key "orders", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "shipping_shipments", "orders"
+  add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_failed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
 end

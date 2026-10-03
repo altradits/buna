@@ -17,6 +17,14 @@ test:
   database: yebente_buna_test
 
 production:
-  <<: *default
-  database: <%= ENV.fetch("POSTGRES_DB", "yebente_buna_production") %>
-  url: <%= ENV["DATABASE_URL"] %>
+  <% if (ENV["DATABASE_URL"] || ENV["POSTGRES_URL"]).present? %>
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV["DATABASE_URL"] || ENV["POSTGRES_URL"] %>
+  <% else %>
+  adapter: sqlite3
+  database: storage/production.sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  <% end %>

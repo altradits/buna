@@ -98,11 +98,13 @@
       <% end %>
 
       <!-- Desktop Navigation Links -->
-      <nav class="hidden lg:flex items-center space-x-6 font-medium text-xs text-[#3A2016]">
-        <%= link_to "Coffee Varieties", products_path(category: "coffee-varieties"), class: "hover:text-[#9E472A] transition-colors" %>
-        <%= link_to "Jebena & Hardware", products_path(category: "traditional-brewing-hardware"), class: "hover:text-[#9E472A] transition-colors" %>
-        <%= link_to "Ceremony Ware", products_path(category: "serving-ware"), class: "hover:text-[#9E472A] transition-colors" %>
-        <%= link_to "Incense & Herbs", products_path(category: "sensory-mood-enhancers"), class: "hover:text-[#9E472A] transition-colors" %>
+      <nav class="hidden lg:flex items-center space-x-5 font-medium text-xs text-[#3A2016]">
+        <%= link_to "All", root_path, class: "hover:text-[#9E472A] transition-colors #{'text-[#9E472A] font-bold' if params[:category].blank? && current_page?(root_path)}" %>
+        <%= link_to "Coffee Varieties", root_path(category: "coffee-varieties"), class: "hover:text-[#9E472A] transition-colors #{'text-[#9E472A] font-bold' if params[:category] == 'coffee-varieties'}" %>
+        <%= link_to "Brewing Hardware", root_path(category: "traditional-brewing-hardware"), class: "hover:text-[#9E472A] transition-colors #{'text-[#9E472A] font-bold' if params[:category] == 'traditional-brewing-hardware'}" %>
+        <%= link_to "Serving Ware", root_path(category: "serving-ware"), class: "hover:text-[#9E472A] transition-colors #{'text-[#9E472A] font-bold' if params[:category] == 'serving-ware'}" %>
+        <%= link_to "Milling", root_path(category: "modern-traditional-milling"), class: "hover:text-[#9E472A] transition-colors #{'text-[#9E472A] font-bold' if params[:category] == 'modern-traditional-milling'}" %>
+        <%= link_to "Sensory & Mood", root_path(category: "sensory-mood-enhancers"), class: "hover:text-[#9E472A] transition-colors #{'text-[#9E472A] font-bold' if params[:category] == 'sensory-mood-enhancers'}" %>
         <%= link_to "Ceremony Guide", ceremony_guide_path, class: "text-[#9E472A] font-semibold hover:underline" %>
       </nav>
 
@@ -128,10 +130,13 @@
     <!-- Mobile Navigation Drawer Dropdown -->
     <div data-mobile-menu-target="menu" class="hidden lg:hidden border-t border-[#EFE7DA] bg-[#FAF6EE] px-4 py-4 space-y-2 shadow-lg">
       <div class="space-y-1">
-        <%= link_to "Single-Origin Coffee Varieties", products_path(category: "coffee-varieties"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold text-[#140B07] hover:bg-white hover:text-[#9E472A]" %>
-        <%= link_to "Clay Jebenas & Brewing Hardware", products_path(category: "traditional-brewing-hardware"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold text-[#140B07] hover:bg-white hover:text-[#9E472A]" %>
-        <%= link_to "Sini Cups & Rekebot Sets", products_path(category: "serving-ware"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold text-[#140B07] hover:bg-white hover:text-[#9E472A]" %>
-        <%= link_to "Sensory Herbs & Frankincense", products_path(category: "sensory-mood-enhancers"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold text-[#140B07] hover:bg-white hover:text-[#9E472A]" %>
+        <%= link_to "All Products", root_path, data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category].blank? && current_page?(root_path) ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
+        <%= link_to "Coffee Varieties", root_path(category: "coffee-varieties"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category] == 'coffee-varieties' ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
+        <%= link_to "Traditional Brewing Hardware", root_path(category: "traditional-brewing-hardware"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category] == 'traditional-brewing-hardware' ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
+        <%= link_to "Serving Ware", root_path(category: "serving-ware"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category] == 'serving-ware' ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
+        <%= link_to "Modern & Traditional Milling", root_path(category: "modern-traditional-milling"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category] == 'modern-traditional-milling' ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
+        <%= link_to "Sensory & Mood Enhancers", root_path(category: "sensory-mood-enhancers"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category] == 'sensory-mood-enhancers' ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
+        <%= link_to "Spatial Aesthetics & Decor", root_path(category: "spatial-aesthetics-decor"), data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-semibold #{params[:category] == 'spatial-aesthetics-decor' ? 'bg-[#24130D] text-[#E5A652]' : 'text-[#140B07] hover:bg-white hover:text-[#9E472A]'}" %>
         <%= link_to "Sacred Ceremony Guide", ceremony_guide_path, data: { action: "click->mobile-menu#close" }, class: "block px-3 py-2 rounded-lg text-xs font-bold text-[#9E472A] bg-amber-50/60" %>
       </div>
 

@@ -1,0 +1,9 @@
+.git
+.github
+.gemini
+tmp/cache/*
+tmp/pids/*
+tmp/sockets/*
+log/*
+node_modules
+.DS_Store

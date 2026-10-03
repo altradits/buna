@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+# Prepare storage directories and permissions
+mkdir -p storage db log tmp/pids
+chmod -R 777 storage db log tmp 2>/dev/null || true
+
+# If PostgreSQL URL is present, prepare database
+if [ -n "$DATABASE_URL" ] || [ -n "$POSTGRES_URL" ]; then
+  echo "=> Running Rails DB prepare on PostgreSQL..."
+  bundle exec rails db:prepare || echo "Database prepare continuing..."
+elif [ ! -f storage/production.sqlite3 ]; then
+  echo "=> Initializing SQLite database..."
+  bundle exec rails db:prepare || true
+  bundle exec rails db:seed || true
+fi
+
+# Remove any pre-existing server PID file
+rm -f tmp/pids/server.pid
+
+# Then exec the container's main process
+exec "$@"

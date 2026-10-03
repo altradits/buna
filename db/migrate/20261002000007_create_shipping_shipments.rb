@@ -17,7 +17,7 @@ class CreateShippingShipments < ActiveRecord::Migration[7.1]
       t.datetime :estimated_delivery_at
       t.datetime :delivered_at
 
-      t.jsonb :tracking_events, default: []
+      t.json :tracking_events, default: []
       t.text :consignment_notes
 
       t.timestamps

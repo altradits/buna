@@ -1,172 +1,80 @@
-<!-- HERO SECTION: Streamlined & Focused -->
-<section class="relative bg-[#24130D] text-white overflow-hidden py-10 sm:py-16 border-b border-[#3A2016]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-      
-      <div class="lg:col-span-7 space-y-4">
-        <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#FAF6EE] leading-tight">
-          Authentic Ethiopian Buna Ceremony, <br>
-          <span class="text-[#D48B38] font-normal italic">Direct to Kenya.</span>
-        </h1>
+<!-- PRODUCT LISTINGS: Immediate Showcase Directly Below Navbar -->
+<div class="py-5 sm:py-7 bg-[#FAF6EE]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <p class="text-xs sm:text-sm text-neutral-300 max-w-xl leading-relaxed">
-          Heirloom single-origin coffees from Yirgacheffe, Sidamo, Harrar, Limu, and Kaffa alongside authentic handcrafted clay Jebenas, Sini porcelain cups, and fragrant Tigray Frankincense.
-        </p>
+    <% if @category.present? %>
+      <div class="mb-5 flex items-center justify-between text-xs text-neutral-600 bg-white px-4 py-2.5 rounded-xl border border-[#EFE7DA]">
+        <div>
+          Showing: <strong class="text-[#140B07]"><%= @category.name %></strong>
+          <span class="text-[#D48B38] font-amharic ml-1">(<%= @category.amharic_name %>)</span>
+          <span class="text-neutral-400 ml-1.5">• <%= @products.count %> items</span>
+        </div>
+        <%= link_to "✕ Show All", root_path, class: "text-xs font-semibold text-[#9E472A] hover:underline" %>
+      </div>
+    <% end %>
 
-        <!-- CTA Buttons -->
-        <div class="flex flex-wrap gap-3 pt-1">
-          <%= link_to "Shop Single-Origin Beans", products_path(category: "coffee-varieties"), class: "px-5 py-2.5 rounded-xl bg-[#D48B38] text-[#140B07] font-bold text-xs hover:bg-[#E5A652] transition-all shadow" %>
-
-          <%= link_to "Clay Jebenas & Ware", products_path(category: "traditional-brewing-hardware"), class: "px-5 py-2.5 rounded-xl bg-[#3A2016] text-[#FAF6EE] font-semibold text-xs hover:bg-[#140B07] border border-[#9E472A]/40 transition-all" %>
+    <!-- Product Grid: Immediate Visual Showcase -->
+    <% if @products.empty? %>
+      <div class="py-12 bg-white rounded-xl border border-[#EFE7DA] text-center space-y-3">
+        <h3 class="font-serif text-lg font-bold text-[#140B07]">No Products Found</h3>
+        <p class="text-xs text-neutral-500">No offerings match your current selection.</p>
+        <div>
+          <%= link_to "View All Products", root_path, class: "px-4 py-2 rounded-lg bg-[#24130D] text-[#E5A652] text-xs font-semibold inline-block hover:bg-[#140B07]" %>
         </div>
       </div>
+    <% else %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+        <% @products.each do |product| %>
+          <div class="bg-white rounded-xl border border-[#EFE7DA] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
+            
+            <div>
+              <!-- Product Image Thumbnail (Single Specific Image Only) -->
+              <div class="w-full h-52 sm:h-56 overflow-hidden bg-[#FAF6EE] border-b border-[#EFE7DA] relative">
+                <%= link_to product_path(product), class: "block w-full h-full" do %>
+                  <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                <% end %>
+              </div>
 
-      <!-- Hero Visual Card -->
-      <div class="lg:col-span-5">
-        <div class="relative mx-auto max-w-sm bg-gradient-to-b from-[#3A2016] to-[#140B07] p-6 rounded-2xl border border-[#9E472A]/30 shadow-xl text-center space-y-3">
-          <div class="w-16 h-16 mx-auto rounded-full bg-[#9E472A]/20 flex items-center justify-center border border-[#D48B38]/40">
-            <span class="font-serif text-2xl font-bold text-[#E5A652]">ጀበና</span>
-          </div>
-          
-          <h3 class="font-serif text-lg font-bold text-[#FAF6EE]">The Complete Buna Set</h3>
-          <p class="text-xs text-neutral-400 leading-relaxed">
-            Gondar clay Jebena, Menkeshkesh roasting pan, Sini cups, Rekebot tray, and Tigray incense burner.
-          </p>
+              <!-- Details Section: Clean & Non-Repetitive -->
+              <div class="p-3.5 space-y-1.5">
+                <div class="text-[11px] text-[#D48B38] font-amharic font-semibold"><%= product.amharic_name %></div>
+                <h3 class="font-serif text-sm font-bold text-[#140B07] group-hover:text-[#9E472A] transition-colors leading-snug">
+                  <%= link_to product.name, product_path(product) %>
+                </h3>
 
-          <div class="pt-2">
-            <%= link_to "View Ceremony Hardware", products_path(category: "traditional-brewing-hardware"), class: "block w-full py-2 rounded-lg bg-[#9E472A] hover:bg-[#B55A3C] text-white text-xs font-semibold transition-all shadow-xs" %>
-          </div>
-        </div>
-      </div>
+                <% if product.coffee? && product.tasting_notes.present? %>
+                  <p class="text-[11px] text-[#9E472A] font-medium leading-relaxed">
+                    <%= product.tasting_notes %>
+                  </p>
+                <% else %>
+                  <p class="text-xs text-neutral-500 line-clamp-2 leading-relaxed">
+                    <%= product.short_description.presence || product.description %>
+                  </p>
+                <% end %>
+              </div>
+            </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- THE 3 SACRED ROUNDS OF BUNA CEREMONY -->
-<section class="py-12 bg-[#FAF6EE] border-b border-[#EFE7DA]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-xl mx-auto space-y-1.5 mb-8">
-      <span class="text-xs font-bold text-[#9E472A] uppercase tracking-widest">Heritage & Culture</span>
-      <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#140B07]">The Three Rounds of Buna</h2>
-      <p class="text-xs text-neutral-500">
-        In Ethiopian tradition, Buna unfolds across three distinct servings:
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <!-- Round 1: Abol -->
-      <div class="p-6 rounded-2xl bg-white border border-[#EFE7DA] shadow-xs space-y-2 relative">
-        <div class="text-xs font-bold text-[#9E472A] uppercase tracking-wider">Round One</div>
-        <h3 class="font-serif text-lg font-bold text-[#140B07]">Abol (አቦል)</h3>
-        <p class="text-xs text-neutral-600 leading-relaxed">
-          The concentrated first pour from the top of the clay Jebena, served to honored guests and elders.
-        </p>
-      </div>
-
-      <!-- Round 2: Tona -->
-      <div class="p-6 rounded-2xl bg-white border border-[#EFE7DA] shadow-xs space-y-2 relative">
-        <div class="text-xs font-bold text-[#9E472A] uppercase tracking-wider">Round Two</div>
-        <h3 class="font-serif text-lg font-bold text-[#140B07]">Tona (ቶና)</h3>
-        <p class="text-xs text-neutral-600 leading-relaxed">
-          Fresh water is simmered with the grounds. A smoother, sweeter cup fostering kinship and conversation.
-        </p>
-      </div>
-
-      <!-- Round 3: Baraka -->
-      <div class="p-6 rounded-2xl bg-white border border-[#EFE7DA] shadow-xs space-y-2 relative">
-        <div class="text-xs font-bold text-[#9E472A] uppercase tracking-wider">Round Three</div>
-        <h3 class="font-serif text-lg font-bold text-[#140B07]">Baraka (በረካ)</h3>
-        <p class="text-xs text-neutral-600 leading-relaxed">
-          The gentle third brew, imparting a final blessing and peace upon the household.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COFFEE ZONES NAVIGATOR -->
-<section class="py-10 bg-[#EFE7DA]/40 border-b border-[#EFE7DA]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-5">
-      <div>
-        <h2 class="font-serif text-xl font-bold text-[#140B07]">Explore by Origin Zone</h2>
-      </div>
-      <%= link_to "View All", products_path(category: "coffee-varieties"), class: "text-xs font-bold text-[#D48B38] hover:text-[#9E472A]" %>
-    </div>
-
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-      <% @coffee_zones.each do |zone| %>
-        <%= link_to products_path(zone: zone), class: "p-4 rounded-xl bg-white border border-[#EFE7DA] hover:border-[#D48B38] hover:shadow-xs transition-all text-center group" do %>
-          <div class="w-8 h-8 mx-auto rounded-full bg-[#24130D] text-[#E5A652] flex items-center justify-center font-bold text-xs mb-1.5 group-hover:scale-105 transition-transform">
-            <%= zone[0..1] %>
-          </div>
-          <div class="font-serif font-bold text-[#140B07] text-sm group-hover:text-[#9E472A]"><%= zone %></div>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURED PRODUCTS SHOWCASE -->
-<section class="py-12 bg-[#FAF6EE]">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <span class="text-xs font-bold text-[#9E472A] uppercase tracking-widest">Curated Offerings</span>
-        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-[#140B07]">Featured Coffee & Artifacts</h2>
-      </div>
-      <%= link_to "View Catalog", products_path, class: "text-xs font-bold text-[#D48B38] hover:text-[#9E472A]" %>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <% @all_featured.each do |product| %>
-        <div class="bg-white rounded-xl border border-[#EFE7DA] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-          <div>
-            <div class="p-3 bg-[#FAF6EE]/60 border-b border-[#EFE7DA] flex items-center justify-between text-[10px]">
-              <span class="font-semibold text-[#9E472A]">
-                <%= product.origin_zone.presence || product.category.name %>
+            <!-- Price & Direct Cart Actions -->
+            <div class="p-3 border-t border-[#EFE7DA] bg-[#FAF6EE]/30 flex items-center justify-between gap-2">
+              <span class="font-bold text-sm text-[#140B07]">
+                <%= product.formatted_price(current_currency) %>
               </span>
-              <% if product.roast_profile.present? %>
-                <span class="px-1.5 py-0.5 rounded bg-[#24130D] text-[#E5A652] font-semibold">
-                  <%= product.roast_profile %>
-                </span>
+
+              <%= form_with url: cart_add_path, method: :post, local: false, class: "flex items-center space-x-1" do |f| %>
+                <%= f.hidden_field :product_id, value: product.id %>
+                <%= f.hidden_field :quantity, value: 1 %>
+                <%= f.hidden_field :format_selected, value: (product.coffee? ? "Roasted Whole Beans" : "Standard") %>
+                <%= f.submit "Add", class: "py-1 px-2.5 rounded-lg bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] text-xs font-semibold cursor-pointer shadow-xs transition-colors" %>
+                <button type="submit" name="buy_now" value="true" class="py-1 px-2.5 rounded-lg bg-[#00A859] hover:bg-[#008F4C] text-white text-xs font-semibold cursor-pointer shadow-xs transition-colors">
+                  Buy Now
+                </button>
               <% end %>
             </div>
 
-            <!-- Image Thumbnail -->
-            <div class="w-full h-48 overflow-hidden bg-[#FAF6EE] border-b border-[#EFE7DA] relative">
-              <%= link_to product_path(product), class: "block w-full h-full" do %>
-                <img src="<%= product.display_image_url %>" alt="<%= product.name %>" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300" loading="lazy">
-              <% end %>
-            </div>
-
-            <div class="p-4 space-y-2">
-              <div class="text-[10px] text-[#D48B38] font-amharic font-semibold"><%= product.amharic_name %></div>
-              <h3 class="font-serif text-sm font-bold text-[#140B07] group-hover:text-[#9E472A] transition-colors leading-snug">
-                <%= link_to product.name, product_path(product) %>
-              </h3>
-              <p class="text-xs text-neutral-500 line-clamp-2 leading-relaxed">
-                <%= product.short_description.presence || product.description %>
-              </p>
-            </div>
           </div>
+        <% end %>
+      </div>
+    <% end %>
 
-          <div class="p-3 border-t border-[#EFE7DA] bg-[#FAF6EE]/20 flex items-center justify-between gap-2">
-            <span class="font-bold text-sm text-[#140B07]"><%= product.formatted_price(current_currency) %></span>
-
-            <%= form_with url: cart_add_path, method: :post, local: false, class: "flex items-center space-x-1" do |f| %>
-              <%= f.hidden_field :product_id, value: product.id %>
-              <%= f.hidden_field :quantity, value: 1 %>
-              <%= f.hidden_field :format_selected, value: (product.coffee? ? "Roasted Whole Beans" : "Standard") %>
-              <%= f.submit "Add", class: "py-1 px-2.5 rounded-lg bg-[#24130D] hover:bg-[#140B07] text-[#E5A652] text-xs font-semibold cursor-pointer shadow-xs" %>
-              <button type="submit" name="buy_now" value="true" class="py-1 px-2.5 rounded-lg bg-[#00A859] hover:bg-[#008F4C] text-white text-xs font-semibold cursor-pointer shadow-xs">
-                Buy Now
-              </button>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
   </div>
-</section>
+</div>

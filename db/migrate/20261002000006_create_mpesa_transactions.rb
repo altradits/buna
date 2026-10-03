@@ -12,7 +12,7 @@ class CreateMpesaTransactions < ActiveRecord::Migration[7.1]
       t.string :result_desc
       t.datetime :transaction_date
       t.string :status, default: "initiated", null: false # initiated, pending, success, failed, cancelled
-      t.jsonb :raw_callback_payload, default: {}
+      t.json :raw_callback_payload, default: {}
 
       t.timestamps
     end

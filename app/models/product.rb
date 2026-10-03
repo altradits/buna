@@ -62,7 +62,17 @@ class Product < ApplicationRecord
       "/images/products/coffee-green-beans.jpg"
     when /fine-ground|jebena-fine|ground-format|fine ground/
       "/images/products/coffee-ground.jpg"
-    when /heirloom|roasted-whole|dark-roast|medium-roast|bensa|longberry|highland-forest|biosphere|whole beans|roasted/
+    when /kaffa.*biosphere|kaffa.*ancient|biosphere.*reserve/
+      "/images/products/kaffa-biosphere-coffee.jpg"
+    when /harrar.*longberry|ancient.*harrar/
+      "/images/products/ancient-harrar-coffee.jpg"
+    when /sidamo.*bensa|bensa.*dark|bensa.*traditional|sidamo.*grade/
+      "/images/products/sidamo-bensa-coffee.jpg"
+    when /yirgacheffe.*kochere.*heirloom|yirgacheffe.*kochere.*roasted|kochere.*heirloom/
+      "/images/products/yirgacheffe-kochere-coffee.jpg"
+    when /limu.*highland|limu.*forest/
+      "/images/products/limu-forest-coffee.jpg"
+    when /heirloom|roasted-whole|dark-roast|medium-roast|whole beans|roasted/
       "/images/products/coffee-roasted-beans.jpg"
     when /gondar.*jebena|gondar clay/
       "/images/products/jebena-gondar.jpg"
@@ -73,10 +83,14 @@ class Product < ApplicationRecord
     when /fernello|brazier|charcoal/
       "/images/products/fernello-brazier.jpg"
     when /kettle|brass-pouring|pouring kettle/
-      "/images/products/jebena-gondar.jpg"
-    when /sini|cini|cups|saucers/
+      "/images/products/brass-pouring-kettle.jpg"
+    when /classic.*cini|cini.*set|habesha.*floral/
+      "/images/products/cini-set-floral.jpg"
+    when /saba.*sini|sini.*set|sini|cini|cups|saucers/
       "/images/products/sini-cups-set.jpg"
-    when /rekebot|coffee table|porcelain.*tray/
+    when /porcelain.*tray|luxury.*rekebot|white.*gold.*rekebot/
+      "/images/products/rekebot-porcelain-tray.jpg"
+    when /rekebot|coffee table/
       "/images/products/rekebot-table.jpg"
     when /mashesha|stirring|stirrer/
       "/images/products/mashesha-stirrer.jpg"

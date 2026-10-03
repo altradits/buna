@@ -6,13 +6,16 @@
 PORT ?= 3000
 RAILS_ENV ?= development
 
-# Userspace Ruby & Gem Environment (Works without root/sudo)
+# Userspace Ruby & Gem Environment
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY ?= YES
+export PATH := /opt/homebrew/opt/ruby@3.2/bin:/opt/homebrew/lib/ruby/gems/3.2.0/bin:/opt/homebrew/opt/postgresql@16/bin:$(HOME)/.local/bin:$(PATH)
+ifneq ($(wildcard $(HOME)/.local/lib/ruby-dev-hook.rb),)
+export RUBYOPT ?= -r$(HOME)/.local/lib/ruby-dev-hook.rb
 export GEM_HOME ?= $(HOME)/.local/share/gem/ruby/3.2.0
 export GEM_PATH ?= $(HOME)/.local/share/gem/ruby/3.2.0:/var/lib/gems/3.2.0
-export PATH := $(HOME)/.local/bin:$(HOME)/.local/share/gem/ruby/3.2.0/bin:$(PATH)
-export RUBYOPT ?= -r$(HOME)/.local/lib/ruby-dev-hook.rb
 export LIBRARY_PATH := $(HOME)/.local/lib/ruby-dev-headers/lib/x86_64-linux-gnu:$(LIBRARY_PATH)
 export LD_LIBRARY_PATH := $(HOME)/.local/lib/ruby-dev-headers/lib/x86_64-linux-gnu:$(LD_LIBRARY_PATH)
+endif
 
 .PHONY: run dev stop kill-port setup seed console status check-deps help
 

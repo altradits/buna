@@ -7,7 +7,7 @@ ruby ">= 3.1.0"
 gem "rails", "~> 7.1.3"
 
 # PostgreSQL Database Adapter
-gem "pg", "~> 1.5"
+gem "pg", "~> 1.5", force_ruby_platform: true
 
 # Web Server
 gem "puma", ">= 5.0"
@@ -18,7 +18,7 @@ gem "stimulus-rails"
 gem "importmap-rails"
 
 # Tailwind CSS & Asset Pipeline for Rails
-gem "tailwindcss-rails"
+gem "tailwindcss-rails", "~> 3.3.1"
 gem "sprockets-rails"
 
 # User Authentication
@@ -26,7 +26,7 @@ gem "devise", "~> 4.9"
 gem "bcrypt", "~> 3.1.7"
 
 # Background Job Queue (Solid Queue for Rails 7.1+ native persistence or Sidekiq)
-gem "solid_queue"
+gem "solid_queue", "~> 0.4.1"
 
 # HTTP Client for Safaricom Daraja API & East African Courier Gateways
 gem "faraday", "~> 2.9"
@@ -51,3 +51,5 @@ end
 group :development do
   gem "web-console"
 end
+
+gem "sqlite3", "~> 2.9"

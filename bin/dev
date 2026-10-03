@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
 if ! command -v foreman &> /dev/null
 then
   exec ./bin/rails server -p 3000

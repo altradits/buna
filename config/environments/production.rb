@@ -51,8 +51,11 @@ Rails.application.configure do
   config.log_tags = [ :request_id ]
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
-  # Use Solid Queue for background processing
-  config.active_job.queue_adapter = :solid_queue
+  # Use Solid Queue or async for background processing
+  config.active_job.queue_adapter = ENV.fetch("ACTIVE_JOB_ADAPTER", "async").to_sym
+
+  # Secret key base fallback if not provided via environment variable
+  config.secret_key_base = ENV["SECRET_KEY_BASE"].presence || "7c9b8e21a4f039d5e68201bfa8293d047e1c6b54a8e29304d9e03f1b5c2a84e68f3a1d9c0b2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f4a"
 
   # Action Mailer config
   config.action_mailer.perform_caching = false
@@ -66,4 +69,5 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  config.active_record.sqlite3_production_warning = false if config.active_record.respond_to?(:sqlite3_production_warning=)
 end

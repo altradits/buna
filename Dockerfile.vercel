@@ -1,0 +1,61 @@
+# syntax=docker/dockerfile:1
+ARG RUBY_VERSION=3.2.11
+FROM ruby:${RUBY_VERSION}-slim AS base
+
+WORKDIR /rails
+
+# Install runtime dependencies
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    curl \
+    libpq5 \
+    libsqlite3-0 \
+    libvips \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+ENV RAILS_ENV="production" \
+    BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_WITHOUT="development:test" \
+    BUNDLE_PATH="/usr/local/bundle"
+
+# Build stage to compile gems and assets
+FROM base AS build
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    git \
+    libpq-dev \
+    libsqlite3-dev \
+    pkg-config \
+    nodejs \
+    npm && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Copy gem dependencies
+COPY Gemfile Gemfile.lock ./
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# Copy application source
+COPY . .
+
+# Precompile assets and prepare schema
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile && \
+    bundle exec rails db:prepare
+
+# Final stage for application image
+FROM base
+
+COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
+COPY --from=build /rails /rails
+
+RUN mkdir -p db log storage tmp/pids && \
+    chmod -R 777 db log storage tmp
+
+ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+
+# Vercel provides $PORT (default 80 if not set, or overrides via env)
+EXPOSE 80 3000
+CMD bundle exec puma -C config/puma.rb -b "tcp://0.0.0.0:${PORT:-80}"

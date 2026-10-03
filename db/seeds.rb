@@ -103,7 +103,8 @@ coffee_varieties = [
     processing_method: "Washed",
     elevation: "2,000m - 2,200m ASL",
     tasting_notes: "Jasmine Floral, Bergamot Citrus, Sweet Peach, Honey",
-    cultural_significance: "Prized in Addis Ababa for the Abol (first round) extraction during Sunday morning Buna ceremonies."
+    cultural_significance: "Prized in Addis Ababa for the Abol (first round) extraction during Sunday morning Buna ceremonies.",
+    image_url: "/images/products/yirgacheffe-kochere-coffee.jpg"
   },
   {
     category: categories[:coffee],
@@ -124,7 +125,8 @@ coffee_varieties = [
     processing_method: "Washed",
     elevation: "2,000m - 2,200m ASL",
     tasting_notes: "Bergamot, Dried Apricot, Meyer Lemon, Jasmine",
-    cultural_significance: "Pre-milled for Kenyan coffee lovers seeking instant authentic extraction without a traditional mortar."
+    cultural_significance: "Pre-milled for Kenyan coffee lovers seeking instant authentic extraction without a traditional mortar.",
+    image_url: "/images/products/coffee-ground.jpg"
   },
   {
     category: categories[:coffee],
@@ -145,7 +147,8 @@ coffee_varieties = [
     processing_method: "Washed",
     elevation: "2,100m ASL",
     tasting_notes: "Crisp Green Apple, Lime Zest, Floral Jasmine (Post-Roast)",
-    cultural_significance: "Essential for the traditional host who roasts beans in presence of honored guests."
+    cultural_significance: "Essential for the traditional host who roasts beans in presence of honored guests.",
+    image_url: "/images/products/coffee-green-beans.jpg"
   },
 
   # --- SIDAMO ---
@@ -168,7 +171,8 @@ coffee_varieties = [
     processing_method: "Natural",
     elevation: "1,900m - 2,150m ASL",
     tasting_notes: "Dark Chocolate, Ripe Blackberry, Brown Sugar, Cardamom Spice",
-    cultural_significance: "The quintessential coffee for multi-generational household ceremonies across the Horn of Africa."
+    cultural_significance: "The quintessential coffee for multi-generational household ceremonies across the Horn of Africa.",
+    image_url: "/images/products/sidamo-bensa-coffee.jpg"
   },
   {
     category: categories[:coffee],
@@ -189,7 +193,8 @@ coffee_varieties = [
     processing_method: "Natural",
     elevation: "1,950m ASL",
     tasting_notes: "Black Cherry, Cacao Nibs, Molasses",
-    cultural_significance: "Preferred base when serving coffee with salt and spiced clarified butter (Niter Kibbeh)."
+    cultural_significance: "Preferred base when serving coffee with salt and spiced clarified butter (Niter Kibbeh).",
+    image_url: "/images/products/coffee-ground.jpg"
   },
 
   # --- HARRAR ---
@@ -212,7 +217,8 @@ coffee_varieties = [
     processing_method: "Natural",
     elevation: "1,800m - 2,000m ASL",
     tasting_notes: "Wild Blueberry, Dark Raisin, Syrupy Body, Warm Cardamom",
-    cultural_significance: "Cultivated in the historic walled city of Harar Jugol, renowned for ancient Sufi coffee traditions."
+    cultural_significance: "Cultivated in the historic walled city of Harar Jugol, renowned for ancient Sufi coffee traditions.",
+    image_url: "/images/products/ancient-harrar-coffee.jpg"
   },
   {
     category: categories[:coffee],
@@ -233,7 +239,8 @@ coffee_varieties = [
     processing_method: "Natural",
     elevation: "1,850m ASL",
     tasting_notes: "Dried Strawberry, Cocoa Dust, Tobacco Leaf",
-    cultural_significance: "The foundation of classic Ethiopian domestic pan roasting."
+    cultural_significance: "The foundation of classic Ethiopian domestic pan roasting.",
+    image_url: "/images/products/coffee-green-beans.jpg"
   },
 
   # --- LIMU ---
@@ -256,7 +263,8 @@ coffee_varieties = [
     processing_method: "Washed",
     elevation: "1,750m - 1,950m ASL",
     tasting_notes: "Sweet Apricot, Nectarine, Lemongrass, Warm Spice",
-    cultural_significance: "A comforting daily drinker favored across Jimma and Oromia."
+    cultural_significance: "A comforting daily drinker favored across Jimma and Oromia.",
+    image_url: "/images/products/limu-forest-coffee.jpg"
   },
 
   # --- KAFFA ---
@@ -279,7 +287,8 @@ coffee_varieties = [
     processing_method: "Natural",
     elevation: "1,600m - 1,900m ASL",
     tasting_notes: "Wild Red Current, Cedar, Earthy Truffle, Black Fig",
-    cultural_significance: "Direct connection to the ancestral origins of Buna culture."
+    cultural_significance: "Direct connection to the ancestral origins of Buna culture.",
+    image_url: "/images/products/kaffa-biosphere-coffee.jpg"
   }
 ]
 
@@ -306,7 +315,8 @@ brewing_hardware = [
     material: "Hand-Molded Smoked Black Clay",
     dimensions: "Height: 28cm, Belly Diameter: 18cm, Capacity: 1.2 Liters",
     cultural_significance: "The sacred centerpiece of the Buna ceremony. The rounded belly allows fine grounds to settle at the bottom during standing, ensuring a crystal-clear pour from the high spout.",
-    usage_instructions: "Season with coffee grounds and boiling water before initial brew. Never wash with synthetic detergents; rinse only with warm water and air-dry upside down."
+    usage_instructions: "Season with coffee grounds and boiling water before initial brew. Never wash with synthetic detergents; rinse only with warm water and air-dry upside down.",
+    image_url: "/images/products/jebena-gondar.jpg"
   },
   {
     category: categories[:brewing],
@@ -324,7 +334,8 @@ brewing_hardware = [
     material: "Terracotta Clay with Ochre Burnishing",
     dimensions: "Height: 24cm, Capacity: 1.0 Liter",
     cultural_significance: "Reflects the architectural and decorative motifs of the old city of Harar.",
-    usage_instructions: "Place directly on gentle charcoal or gas burner diffuser ring."
+    usage_instructions: "Place directly on gentle charcoal or gas burner diffuser ring.",
+    image_url: "/images/products/jebena-harari.jpg"
   },
   {
     category: categories[:brewing],
@@ -342,7 +353,8 @@ brewing_hardware = [
     material: "Wrought Iron with Hardwood Handle",
     dimensions: "Pan Diameter: 22cm, Handle Length: 32cm",
     cultural_significance: "Used during the second ceremonial phase where newly roasted beans are walked around the room so guests may inhale the fragrant smoke.",
-    usage_instructions: "Lightly coat with vegetable oil before storing to prevent oxidation."
+    usage_instructions: "Lightly coat with vegetable oil before storing to prevent oxidation.",
+    image_url: "/images/products/menkeshkesh-pan.jpg"
   },
   {
     category: categories[:brewing],
@@ -360,7 +372,8 @@ brewing_hardware = [
     material: "Refractory Clay & Reinforced Iron Frame",
     dimensions: "Top Diameter: 26cm, Height: 20cm",
     cultural_significance: "Provides the rhythmic warmth and incense dispersal that sets the spiritual mood.",
-    usage_instructions: "Use with hardwood charcoal or coconut husk briquettes indoors with adequate ventilation."
+    usage_instructions: "Use with hardwood charcoal or coconut husk briquettes indoors with adequate ventilation.",
+    image_url: "/images/products/fernello-brazier.jpg"
   },
   {
     category: categories[:brewing],
@@ -378,7 +391,8 @@ brewing_hardware = [
     material: "Spun Solid Brass",
     dimensions: "Capacity: 1.5 Liters",
     cultural_significance: "Maintains a steady supply of boiling water without interrupting the ceremony.",
-    usage_instructions: "Rinse with lemon and salt water to maintain radiant brass patina."
+    usage_instructions: "Rinse with lemon and salt water to maintain radiant brass patina.",
+    image_url: "/images/products/brass-pouring-kettle.jpg"
   }
 ]
 
@@ -405,7 +419,8 @@ serving_ware = [
     material: "Glazed Porcelain with 18k Gold Trim Inlay",
     dimensions: "Cup Capacity: 65ml, Diameter: 6cm, Height: 5cm",
     cultural_significance: "The Saba motif is a national cultural emblem symbolizing ancient royal heritage and Ethiopian hospitality.",
-    usage_instructions: "Hand wash gently with mild soap to preserve gold foil border."
+    usage_instructions: "Hand wash gently with mild soap to preserve gold foil border.",
+    image_url: "/images/products/sini-cups-set.jpg"
   },
   {
     category: categories[:serving],
@@ -423,7 +438,8 @@ serving_ware = [
     material: "Durable Ceramic with High-Fire Enamel",
     dimensions: "Cup Capacity: 70ml (12 cups + 12 saucers)",
     cultural_significance: "Accommodates all guests so that everyone sips the Baraka round together in unison.",
-    usage_instructions: "Dishwasher safe on gentle cycle."
+    usage_instructions: "Dishwasher safe on gentle cycle.",
+    image_url: "/images/products/cini-set-floral.jpg"
   },
   {
     category: categories[:serving],
@@ -441,7 +457,8 @@ serving_ware = [
     material: "Native Hardwood with Hand-Rubbed Beeswax Polish",
     dimensions: "Length: 48cm, Width: 32cm, Height: 24cm",
     cultural_significance: "The visual anchor of the living room ceremony. Sitting around the Rekebot signifies familial unity and mutual respect.",
-    usage_instructions: "Wipe with damp cloth and nourish with natural mineral oil twice yearly."
+    usage_instructions: "Wipe with damp cloth and nourish with natural mineral oil twice yearly.",
+    image_url: "/images/products/rekebot-table.jpg"
   },
   {
     category: categories[:serving],
@@ -459,7 +476,8 @@ serving_ware = [
     material: "Reinforced Enamelled Porcelain",
     dimensions: "Length: 44cm, Width: 30cm",
     cultural_significance: "Bridges centuries-old coffee rituals with high-end contemporary interior spaces.",
-    usage_instructions: "Handle with care. Avoid abrasive cleaning pads."
+    usage_instructions: "Handle with care. Avoid abrasive cleaning pads.",
+    image_url: "/images/products/rekebot-porcelain-tray.jpg"
   },
   {
     category: categories[:serving],
@@ -477,7 +495,8 @@ serving_ware = [
     material: "East African Wild Olive Wood",
     dimensions: "Length: 22cm",
     cultural_significance: "Used during the brewing process to gently awaken grounds settled in the lower chamber.",
-    usage_instructions: "Hand wash with cold water; dry immediately."
+    usage_instructions: "Hand wash with cold water; dry immediately.",
+    image_url: "/images/products/mashesha-stirrer.jpg"
   }
 ]
 
