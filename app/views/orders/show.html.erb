@@ -67,39 +67,24 @@
         </div>
       </div>
 
-      <!-- Delivery & Cross-Border Logistics Info -->
-      <div class="bg-white p-6 rounded-3xl border border-[#EFE7DA] shadow-sm space-y-4">
-        <h3 class="font-serif text-lg font-bold text-[#140B07] border-b border-[#EFE7DA] pb-3">Cross-Border Routing</h3>
+      <!-- Delivery Info -->
+      <div class="bg-white p-5 sm:p-6 rounded-2xl border border-[#EFE7DA] shadow-xs space-y-3">
+        <h3 class="font-serif text-base font-bold text-[#140B07] border-b border-[#EFE7DA] pb-2.5">Delivery Details</h3>
         
-        <div class="text-xs space-y-3 text-neutral-700">
+        <div class="text-xs space-y-2 text-neutral-700">
           <div>
-            <span class="block text-neutral-400 text-[10px] uppercase font-bold">Recipient</span>
-            <span class="font-semibold text-[#140B07]"><%= @order.customer_name %></span>
+            <span class="text-neutral-400 text-[10px] uppercase font-bold block">Recipient</span>
+            <span class="font-semibold text-[#140B07]"><%= @order.customer_name %> • <%= @order.customer_phone %></span>
           </div>
 
           <div>
-            <span class="block text-neutral-400 text-[10px] uppercase font-bold">Destination</span>
-            <p><%= @order.delivery_address %>, <%= @order.delivery_city %>, <%= @order.delivery_county %>, Kenya</p>
+            <span class="text-neutral-400 text-[10px] uppercase font-bold block">Destination</span>
+            <p><%= @order.delivery_address %>, <%= @order.delivery_city %>, <%= @order.delivery_county %></p>
           </div>
 
-          <div>
-            <span class="block text-neutral-400 text-[10px] uppercase font-bold">Contact Phone (M-Pesa)</span>
-            <span class="font-bold text-[#00A859]"><%= @order.customer_phone %></span>
-          </div>
-
-          <div class="pt-3 border-t border-[#EFE7DA] space-y-2">
-            <div>
-              <span class="block text-neutral-400 text-[10px] uppercase font-bold">Origin Logistics Hub</span>
-              <span class="font-semibold text-[#24130D]">Addis Ababa Bole Central Hub (Ethiopia)</span>
-            </div>
-            <div>
-              <span class="block text-neutral-400 text-[10px] uppercase font-bold">Border Crossing Station</span>
-              <span class="font-semibold text-[#24130D]">Moyale One-Stop Border Post (OSBP) Customs Cleared</span>
-            </div>
-            <div>
-              <span class="block text-neutral-400 text-[10px] uppercase font-bold">Assigned Courier</span>
-              <span class="font-semibold text-[#D48B38]"><%= @order.courier_provider %></span>
-            </div>
+          <div class="pt-2 border-t border-[#FAF6EE] flex items-center justify-between text-xs">
+            <span class="text-neutral-400">Assigned Courier:</span>
+            <span class="font-bold text-[#00A859]"><%= @order.courier_provider %></span>
           </div>
         </div>
       </div>
